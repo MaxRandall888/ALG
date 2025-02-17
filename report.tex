@@ -36,6 +36,8 @@ Automata are abstract machines that model computations without memory. Before de
 \section{Introduction}
 Automata are abstract machines that model computations without memory. Before defining them formally, we consider some examples.
 
+\newpage
+
 \section{Examples of Automata}
 
 \subsection{Parking or Vending Machine}
@@ -110,6 +112,8 @@ Automata are abstract machines that model computations without memory. Before de
 \end{tikzpicture}
 \end{center}
 
+\newpage
+
 \section{Homework}
 
 \subsection{Exercise: Characterizing Accepted Words}
@@ -150,6 +154,19 @@ where:
     & p p u p p p &\quad \text{(Multiple pays, a push to lock, then more pays)} \\
     & u p u p u p &\quad \text{(Invalid pushes in locked state, followed by pays to unlock)}
 \end{align*}
+
+\newpage
+
+\section{Summary of 2.1}
+
+Finite automata are abstract machines used to recognize regular languages, which can be fully described using finite-state transitions. This chapter explores deterministic finite automata (DFAs) and nondeterministic finite automata (NFAs), demonstrating that NFAs, despite their flexibility, recognize the same class of languages as DFAs.
+
+A key distinction between the two is that DFAs have a single active state at any time, whereas NFAs may simultaneously exist in multiple states. While NFAs simplify language representation, they can always be converted into equivalent DFAs through an algorithmic transformation.
+
+An important extension of NFAs allows transitions on the empty string, further enhancing their expressiveness while still recognizing only regular languages. These $\varepsilon$-NFAs will later play a crucial role in proving the equivalence of finite automata and regular expressions.
+
+The chapter also introduces an applied perspective on finite automata through a real-world example: electronic money protocols. By modeling interactions between a bank, a store, and a customer as finite automata, the protocol’s correctness and potential fraud vulnerabilities can be analyzed. The study concludes with constructing a product automaton to validate interactions, ensuring that transactions occur as intended while preventing unauthorized duplication or cancellation of funds.
+
 \section{Conclusion}
 \maketitle
 
