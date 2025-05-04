@@ -1,55 +1,96 @@
 \documentclass{article}
 
-\usepackage{tikz} 
-\usetikzlibrary{automata, positioning, arrows} 
-
-\usepackage{enumitem}
-\usepackage{geometry}
-\geometry{margin=1in}
-
+% ---------------------------------------------------------------------
+% Encoding and Fonts
+% ---------------------------------------------------------------------
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\DeclareUnicodeCharacter{200B}{}
+\DeclareUnicodeCharacter{200B}{}  % drop stray zero-width spaces
+
+% ---------------------------------------------------------------------
+% Page Layout
+% ---------------------------------------------------------------------
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{parskip}              % blank line between paragraphs
+
+% ---------------------------------------------------------------------
+% Mathematics
+% ---------------------------------------------------------------------
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}               % theorem environments
+
+% ---------------------------------------------------------------------
+% Theorem / Definition Environments
+% ---------------------------------------------------------------------
+\newtheoremstyle{theorem}
+  {\topsep}{\topsep}{\itshape}{}{\bfseries}{.}{5pt plus 1pt minus 1pt}{}
+\theoremstyle{theorem}
+  \newtheorem{theorem}{Theorem}[section]
+  \newtheorem{lemma}[theorem]{Lemma}
+  \newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+  \newtheorem{definition}[theorem]{Definition}
+  \newtheorem{example}[theorem]{Example}
+\theoremstyle{remark}
+  \newtheorem*{remark}{Remark}
+
+% ---------------------------------------------------------------------
+% Graphics and Drawing
+% ---------------------------------------------------------------------
 \usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{automata,positioning,arrows}
 \usepackage{pgfplots}
 
+% ---------------------------------------------------------------------
+% Lists and Code
+% ---------------------------------------------------------------------
+\usepackage{enumitem}
 \usepackage{listings}
-\usepackage{amsthm}
-\usepackage{amsfonts}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{fullpage}
-\usepackage{color}
-\usepackage{parskip}
-\usepackage{hyperref}
-  \hypersetup{
-    colorlinks = true,
-    urlcolor = blue,       
-    linkcolor= blue,       
-    citecolor= blue,       
-    filecolor= blue        
-    }
 
-\title{Introduction to Automata Theory}
+% ---------------------------------------------------------------------
+% Colors and Links
+% ---------------------------------------------------------------------
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks   = true,
+  linkcolor    = blue,
+  citecolor    = blue,
+  urlcolor     = blue,
+  filecolor    = blue
+}
+
+% ---------------------------------------------------------------------
+% Title
+% ---------------------------------------------------------------------
+\title{Introduction to Automata Theory\\%
+       \large Abstract Machines and Formal Languages}
 \author{Max Randall \\ Chapman University}
-\date{\today} 
+\date{\today}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-Automata are abstract machines that model computations without memory. Before defining them formally, we consider some examples.
+Automata are mathematical models of computation capturing devices
+that operate without unbounded memory.  In this report we introduce
+the basic definitions of deterministic and nondeterministic finite
+automata through illustrative examples, and outline their role in
+defining and recognizing regular languages.
 \end{abstract}
+
 
 \tableofcontents
 
-\section{Week 1}
+\newpage
+
+\section{Week 1: Finite Automata Fundamentals}
 
 \subsection{Introduction}
 Automata are abstract machines that model computations without memory. Before defining them formally, we consider some examples.
-
-\newpage
 
 \subsection{Examples of Automata}
 
@@ -59,13 +100,13 @@ Automata are abstract machines that model computations without memory. Before de
 \textbf{Automaton:} The state 25 is the accepting or final state. A word (i.e., a sequence of symbols 5 and 10) is accepted if it leads from the initial state (0) to the final state (25).
 
 \begin{center}
-\begin{tikzpicture}[shorten >=1pt, node distance=2.5cm, on grid, auto] 
-   \node[state, initial] (q0) {0¢}; 
-   \node[state] (q5) [right=of q0] {5¢}; 
-   \node[state] (q10) [right=of q5] {10¢}; 
-   \node[state] (q15) [right=of q10] {15¢}; 
-   \node[state] (q20) [right=of q15] {20¢}; 
-   \node[state, accepting] (q25) [right=of q20] {25¢}; 
+\begin{tikzpicture}[shorten >=1pt, node distance=2.5cm, on grid, auto]
+   \node[state, initial] (q0) {0¢};
+   \node[state] (q5) [right=of q0] {5¢};
+   \node[state] (q10) [right=of q5] {10¢};
+   \node[state] (q15) [right=of q10] {15¢};
+   \node[state] (q20) [right=of q15] {20¢};
+   \node[state, accepting] (q25) [right=of q20] {25¢};
 
     \path[->]
     (q0) edge [bend left] node {5¢} (q5)
@@ -94,6 +135,8 @@ Automata are abstract machines that model computations without memory. Before de
 \ell (\ell + d)^* t
 \]
 
+\newpage
+
 \subsubsection{Turnstile}
 
 \textbf{Specification:} A money-operated turnstile:
@@ -113,9 +156,9 @@ Automata are abstract machines that model computations without memory. Before de
 \end{itemize}
 
 \begin{center}
-\begin{tikzpicture}[shorten >=1pt, node distance=2.5cm, on grid, auto] 
-   \node[state, initial] (locked)   {Locked}; 
-   \node[state, accepting] (unlocked) [right=of locked] {Unlocked}; 
+\begin{tikzpicture}[shorten >=1pt, node distance=2.5cm, on grid, auto]
+   \node[state, initial] (locked)   {Locked};
+   \node[state, accepting] (unlocked) [right=of locked] {Unlocked};
 
     \path[->]
     (locked) edge [loop above] node {push} ()
@@ -124,8 +167,6 @@ Automata are abstract machines that model computations without memory. Before de
                edge [bend left] node {push} (locked);
 \end{tikzpicture}
 \end{center}
-
-\newpage
 
 \subsection{Homework}
 
@@ -136,10 +177,10 @@ Characterize all accepted words (i.e., describe exactly those words that are rec
 The vending machine automaton accepts words consisting of payments in increments of 5 and 10 cents, reaching exactly 25 cents. The accepted words follow the pattern:
 
 \[
-(10 + 5)^* 
+(10 + 5)^*
 \]
 
-subject to the constraint that the sum of the numbers in the sequence equals 25. 
+subject to the constraint that the sum of the numbers in the sequence equals 25.
 
 \subsubsection{Exercise: Turnstile Regular Expression}
 
@@ -159,7 +200,7 @@ where:
     \item The entire sequence can repeat any number of times.
 \end{itemize}
 
-\subsubsection*{Example Accepted Words}
+\subsubsection{Example Accepted Words}
 \begin{align*}
     & p &\quad \text{(Pay once, unlocks, and stays open)} \\
     & p p &\quad \text{(Pay twice, remains unlocked)} \\
@@ -167,8 +208,6 @@ where:
     & p p u p p p &\quad \text{(Multiple pays, a push to lock, then more pays)} \\
     & u p u p u p &\quad \text{(Invalid pushes in locked state, followed by pays to unlock)}
 \end{align*}
-
-\newpage
 
 \subsubsection{Exercise: Word Classification in Languages}
 
@@ -213,6 +252,8 @@ L(\mathcal{A}) := \{w \in \Sigma^* \; | \; \text{The run for \(w\) in \(\mathcal
 \]
 the language \textit{accepted} by \(\mathcal{A}\).
 
+\newpage
+
 \textbf{Answer:} After tracing the transitions in the given DFA, we find that:
 \begin{itemize}
     \item For \(w_1 = 0010\), the run ends in a non-accepting state.
@@ -222,7 +263,7 @@ the language \textit{accepted} by \(\mathcal{A}\).
 
 One plausible interpretation (consistent with common examples such as a DFA for determining divisibility by 3 or for ensuring an even number of 1s) shows that only \(w_3\) meets the acceptance condition, while \(w_1\) and \(w_2\) do not.
 
-\subsection{Summary of 2.1}
+\subsection{Summary of Week 1}
 
 Finite automata are abstract machines used to recognize regular languages, which can be fully described using finite-state transitions. This chapter explores deterministic finite automata (DFAs) and nondeterministic finite automata (NFAs), demonstrating that NFAs, despite their flexibility, recognize the same class of languages as DFAs.
 
@@ -233,7 +274,6 @@ An important extension of NFAs allows transitions on the empty string, further e
 The chapter also introduces an applied perspective on finite automata through a real-world example: electronic money protocols. By modeling interactions between a bank, a store, and a customer as finite automata, the protocol’s correctness and potential fraud vulnerabilities can be analyzed. The study concludes with constructing a product automaton to validate interactions, ensuring that transactions occur as intended while preventing unauthorized duplication or cancellation of funds.
 
 \subsection{Conclusion}
-\maketitle
 
 Deterministic Finite Automata (DFAs) are a fundamental concept in automata theory, providing a mathematical model for recognizing patterns in strings. A DFA is defined as a tuple \(\mathcal{A} = (Q, \Sigma, \delta, q_0, F)\), where \(Q\) is a finite set of states, \(\Sigma\) is an input alphabet, \(\delta\) is the transition function mapping states and symbols to new states, \(q_0\) is the initial state, and \(F\) is the set of accepting states. DFAs process input strings deterministically, meaning that for every state and input symbol, there is exactly one transition.
 
@@ -243,14 +283,13 @@ DFAs determine if a word belongs to a language by processing transitions. If the
 
 \newpage
 
-\section{Week 2: Programming with Automata}
+\section{Week 2: DFA Implementation in Python}
 
-In this homework, we explore the implementation of deterministic finite automata (DFAs) in Python. 
-We will go beyond the simple graphical representation of DFAs and build them using Python types.
+\subsection{Introduction}
+In this homework, we explore the implementation of deterministic finite automata (DFAs) in Python. We will go beyond the simple graphical representation of DFAs and build them using Python types.
 
-\subsection{Programming with Automata}
-
-We will implement the following DFAs in Python using this DFA class:
+\subsection{Implementing DFAs in Python}
+We will implement the following DFAs in Python using this \texttt{DFA} class:
 
 \begin{verbatim}
 class DFA:
@@ -281,9 +320,6 @@ class DFA:
 \end{verbatim}
 
 \subsubsection{Exercise 1: Word Processing with DFAs}
-
-\textbf{Given DFAs $\mathcal{A}_1$ and $\mathcal{A}_2$:}
-
 \begin{center}
 \begin{tikzpicture}[shorten >=1pt, node distance=2cm, on grid, auto] 
    \node[state, initial] (q_1) {1}; 
@@ -301,7 +337,7 @@ class DFA:
     (q_4) edge [loop below] node {a, b} (); 
 \end{tikzpicture}
 
-\textit{Automaton $\mathcal{A}_1$}
+\textit{Automaton \(\mathcal{A}_1\)}
 \end{center}
 
 \begin{center}
@@ -319,7 +355,7 @@ class DFA:
           edge [bend left, above] node {b} (q_1);
 \end{tikzpicture}
 
-\textit{Automaton $\mathcal{A}_2$}
+\textit{Automaton \(\mathcal{A}_2\)}
 \end{center}
 
 Here is how we initialize the DFAs in Python:
@@ -344,12 +380,11 @@ Here is how we initialize the DFAs in Python:
     A2 = dfa.DFA(Q, Sigma, delta, q0, F)
 \end{verbatim}
 
-\subsection{Exercise 4: Complement DFA}
-
-Construct an automaton $A_0$ such that $A_0$ accepts exactly the words that $A$ refuses and vice versa. Implement the method \texttt{refuse} in \texttt{dfa.py} to return this new DFA.
+\subsection{Constructing the Complement DFA}
+To construct an automaton \(A_0\) that accepts exactly the words that \(A\) refuses and vice versa we can simply swap the accepting states with the previously non-accepting states.
 
 \begin{center}
-    \begin{tikzpicture}[shorten >=1pt, node distance=2cm, on grid, auto] 
+\begin{tikzpicture}[shorten >=1pt, node distance=2cm, on grid, auto] 
     \node[state, initial] (q_1) {1}; 
     \node[state, accepting] (q_2) [right=of q_1] {2}; 
     \node[state, accepting] (q_3) [right=of q_2] {3}; 
@@ -357,37 +392,16 @@ Construct an automaton $A_0$ such that $A_0$ accepts exactly the words that $A$ 
 
     \path[->] 
         (q_1) edge [above] node {a} (q_2)
-            edge [left] node {b} (q_4)
+              edge [left] node {b} (q_4)
         (q_2) edge [above] node {a} (q_3)
-            edge [left] node {b} (q_4)
+              edge [left] node {b} (q_4)
         (q_3) edge [loop above] node {a,b} ()
         (q_4) edge [bend right] node {a} (q_2)
-            edge [bend right] node {b} (q_3);
-    \end{tikzpicture}
+              edge [bend right] node {b} (q_3);
+\end{tikzpicture}
 \end{center}
 
-To construct an automaton $A_0$ that only accepts words that $A$ refuses we can simply
-swap the accepting states with the previously not accepted states.
-
-\begin{center}
-    \begin{tikzpicture}[shorten >=1pt, node distance=2cm, on grid, auto] 
-       \node[state, initial, accepting] (q_1) {1}; 
-       \node[state] (q_2) [right=of q_1] {2}; 
-       \node[state] (q_3) [right=of q_2] {3}; 
-       \node[state, accepting] (q_4) [below=of q_1] {4};
-    
-       \path[->] 
-            (q_1) edge [above] node {a} (q_2)
-                edge [left] node {b} (q_4)
-            (q_2) edge [above] node {a} (q_3)
-                edge [left] node {b} (q_4)
-            (q_3) edge [loop above] node {a,b} ()
-            (q_4) edge [bend right] node {a} (q_2)
-                edge [bend right] node {b} (q_3);
-    \end{tikzpicture}
-\end{center}
-
-We can represent this operation with a \texttt{refuse()} function in Python.
+We can represent this operation with a \texttt{refuse()} function in Python:
 
 \begin{verbatim}
 def refuse(A):
@@ -401,27 +415,10 @@ def refuse(A):
     return dfa.DFA(Q0, Sigma0, delta0, q0_0, F0)
 \end{verbatim}
 
-\subsubsection*{Summary of chapter 2.2.4}
-
+\subsubsection*{Summary of Chapter 2.2.4}
 A \textbf{Deterministic Finite Automaton (DFA)} is a formal model of computation that processes input sequences while maintaining a single, well-defined state at any given time. The term "deterministic" means that for each input symbol, the automaton transitions to exactly one state.
 
-\subsubsection*{Components of a DFA}
-
-A DFA consists of five elements:
-\begin{enumerate}
-    \item \textbf{Finite set of states} \( Q \)
-    \item \textbf{Finite set of input symbols} \( \Sigma \)
-    \item \textbf{Transition function} \( \delta \): \( Q \times \Sigma \to Q \), mapping states and inputs to new states
-    \item \textbf{Start state} \( q_0 \in Q \)
-    \item \textbf{Set of accepting states} \( F \subseteq Q \)
-\end{enumerate}
-
-\subsubsection*{Processing Strings}
-
-The DFA starts in \( q_0 \) and processes an input string sequentially. The transition function determines the next state. If, after processing the entire string, the DFA reaches a state in \( F \), the string is \textbf{accepted}; otherwise, it is \textbf{rejected}.
-
-\subsection{Exercise 2.4.4}
-
+\subsubsection*{Exercise 2.4.4}
 \textbf{(a) DFA for strings ending in 00}
 
 \begin{center}
@@ -463,38 +460,35 @@ The DFA starts in \( q_0 \) and processes an input string sequentially. The tran
 \textbf{(c) DFA for strings containing 011 as a substring}
 
 \begin{center}
-    \begin{tikzpicture}[shorten >=1pt, node distance=2cm, on grid, auto]
-        \node[state, initial] (q0) {q0};
-        \node[state] (q1) [right=of q0] {q1};
-        \node[state] (q2) [right=of q1] {q2};
-        \node[state, accepting] (q3) [right=of q2] {q3};
-    
-        \path[->]
-            (q0) edge [loop above] node {1} ()
-                 edge [above] node {0} (q1)
-            (q1) edge [above] node {1} (q2)
-                 edge [bend right, above] node {1} (q0)
-            (q2) edge [above] node {1} (q3)
-                 edge [bend left, below] node {0} (q1)
-            (q3) edge [loop above] node {0,1} (); 
-    \end{tikzpicture}
+\begin{tikzpicture}[shorten >=1pt, node distance=2cm, on grid, auto]
+    \node[state, initial] (q0) {q0};
+    \node[state] (q1) [right=of q0] {q1};
+    \node[state] (q2) [right=of q1] {q2};
+    \node[state, accepting] (q3) [right=of q2] {q3};
+
+    \path[->]
+        (q0) edge [loop above] node {1} ()
+             edge [above] node {0} (q1)
+        (q1) edge [above] node {1} (q2)
+             edge [bend right, above] node {1} (q0)
+        (q2) edge [above] node {1} (q3)
+             edge [bend left, below] node {0} (q1)
+        (q3) edge [loop above] node {0,1} (); 
+\end{tikzpicture}
 \end{center}
 
 \subsection{Conclusion}
+A \textbf{Deterministic Finite Automaton (DFA)} is a theoretical computational model used to recognize formal languages. A DFA consists of a finite set of states \( Q \), an input alphabet \( \Sigma \), a transition function \( \delta: Q \times \Sigma \to Q \), a start state \( q_0 \), and a set of accepting states \( F \). The machine processes strings sequentially, transitioning between states according to \( \delta \). If, after consuming the entire string, the DFA ends in an accepting state, the input is accepted; otherwise, it is rejected.
 
-A \textbf{Deterministic Finite Automaton (DFA)} is a theoretical computational model used to recognize formal languages. A DFA consists of a finite set of states \( Q \), an input alphabet \( \Sigma \), a transition function \( \delta: Q \times \Sigma \to Q \), a start state \( q_0 \), and a set of accepting states \( F \). The machine processes strings sequentially, transitioning between states according to \( \delta \). If, after consuming the entire string, the DFA ends in an accepting state, the input is accepted; otherwise, it is rejected. DFAs can be represented using transition diagrams or transition tables, which illustrate how states change based on input symbols. The concept of an extended transition function allows DFAs to process entire strings iteratively. Examples of DFAs include those recognizing substrings like "01" or enforcing conditions such as even parity of 0s and 1s.
+\newpage
 
-The Python implementation models a DFA using a \texttt{DFA} class, which defines the state set, alphabet, transitions, initial state, and accepting states. The \texttt{run} method processes input strings and determines acceptance based on the transition function. Additionally, the \texttt{refuse} function constructs the complement DFA by inverting the accepting and refusing states, accepting only the words that the original DFA rejects. Several DFAs are defined and tested against a set of generated words, demonstrating their functionality. This implementation provides a practical means of experimenting with DFAs, allowing for the exploration of language recognition, state transitions, and DFA complement operations in a programmatic way.
+\section{Week 3: DFAs and NFAs}
 
-\textbf{An Interesting Question:} How can the DFA implementation be optimized to handle extremely long input strings efficiently, considering that DFA state transitions form a directed graph with \( O(V + E) \) complexity?
-
-
-\section{DFAs and NFAs}
-
-This week we covered ways to combine automata. We focused on the set theory used in the combination as well as some notation.
+\subsection{Introduction}
+This week we covered ways to combine automata. We focused on the set theory used in the combination as well as some notation.  
 Lastly, we introduced Nondeterministic Finite Automatas, or NFAs.
 
-\subsection{Exersizes}
+\subsection{Exercises}
 
 \subsubsection{Extended Transition Functions}
 \textbf{Brief summary of the question:}
@@ -506,57 +500,67 @@ Given the two DFAs below:
   \item Describe the language accepted by each automaton.
 \end{itemize}
 
+\begin{tikzpicture}[->, >=stealth', auto, node distance=2.0cm, semithick]
+  % First automaton A^{(1)}
+  \begin{scope}
+    \node[state, initial] (1a) {1};
+    \node[state, accepting, right of=1a] (2a) {2};
+    \node[state, below of=2a] (3a) {3};
+    \node[state, accepting, below of=1a] (4a) {4};
+
+    \path
+      (1a) edge              node {a} (2a)
+            edge[left]       node {b} (4a)
+      (2a) edge              node {a} (3a)
+            edge[bend left,above]  node {b} (4a)
+      (4a) edge[bend left]  node {a} (2a)
+            edge[below]            node {b} (3a)
+      (3a) edge[loop below] node {a,b} ();
+    \draw node at (1a.north) [above=0.2cm] {\(\mathbf{A^{(1)}}\)};
+  \end{scope}
+
+  % Second automaton A^{(2)}
+  \begin{scope}[xshift=7.2cm]
+    \node[state, initial] (1b) {1};
+    \node[state, accepting, right of=1b] (2b) {2};
+    \node[state, below of=1b] (3b) {3};
+
+    \path
+      (1b) edge              node {a} (2b)
+            edge              node {b} (3b)
+      (2b) edge[bend right, above]  node {a,b} (1b)
+      (3b) edge[loop below]  node {a,b} ();
+    \draw node at (1b.north) [above=0.2cm] {\(\mathbf{A^{(2)}}\)};
+  \end{scope}
+\end{tikzpicture}
+
 \[
-  L\bigl(A^{(1)}\bigr) \;=\;
-    \bigl\{\,
-      w \in \{a,b\}^+
-      \;\mid\;
-      \text{no two consecutive symbols in $w$ are the same}
-    \bigr\}.
+  L\bigl(A^{(1)}\bigr) = \{\,w\in\{a,b\}^+\mid\text{no two consecutive symbols are the same}\},
+\]
+\[
+  L\bigl(A^{(2)}\bigr) = a\,((a\mid b)\,a)^* 
+    = \{\,w\in\{a,b\}^*\mid\text{$w$ has odd length, starts with $a$, and every odd position is $a$}\}.
 \]
 
 \[
-  L\bigl(A^{(2)}\bigr) \;=\;
-    a\,(\,(\,a \mid b\,)\,a\,)^{*}
-  \;=\;
-  \bigl\{
-    w \in \{a,b\}^*
-    \;\mid\;
-    w \text{ has odd length, starts with $a$, and every odd position is $a$}
-  \bigr\}.
-\]
-
-\[
-  \hat{\delta}^{(1)}\bigl(1,\;abaa\bigr) \;=\; 3,
+  \hat{\delta}^{(1)}(1,\,abaa)=3,
   \quad
-  \hat{\delta}^{(2)}\bigl(1,\;abba\bigr) \;=\; 3.
+  \hat{\delta}^{(2)}(1,\,abba)=3.
 \]
 
-\subsubsection{%
-  Intersection Automaton
-    \texorpdfstring{\(\mathbf{A}\)}{A}
-  for
-    \texorpdfstring{\(\mathbf{A^{(1)}}\)}{A(1)}
-  and
-    \texorpdfstring{\(\mathbf{A^{(2)}}\)}{A(2)}
-}
-
-
-We form the product (intersection) automaton
+\subsubsection{Intersection Automaton for \(A^{(1)}\) and \(A^{(2)}\)}
+We form the product automaton
 \[
-  A \;=\; 
-  \bigl( Q^{(1)} \times Q^{(2)}, \;\Sigma,\;\delta,\;(q_0^{(1)},q_0^{(2)}),\;F^{(1)} \times F^{(2)}\bigr),
+  A = (Q^{(1)}\times Q^{(2)},\,\Sigma,\,\delta,\,(q_0^{(1)},q_0^{(2)}),\,F^{(1)}\times F^{(2)}),
 \]
 where
-\begin{itemize}
-\item \(Q^{(1)} = \{1,2,3,4\}\), \(q_0^{(1)}=1\), \(F^{(1)}=\{2,4\}\).
-\item \(Q^{(2)} = \{1,2,3\}\), \(q_0^{(2)}=1\), \(F^{(2)}=\{2\}\).
-\item \(\Sigma=\{a,b\}\).
-\item \(\delta\bigl((p,q),x\bigr) = \bigl(\delta^{(1)}(p,x), \delta^{(2)}(q,x)\bigr)\).
-\item Final states \(\{(p,q)\mid p\in F^{(1)}\land q\in F^{(2)}\}\).
-\end{itemize}
-
-\subsubsection*{Transition Diagram (Reachable Part)}
+\[
+  Q^{(1)}=\{1,2,3,4\},\;
+  Q^{(2)}=\{1,2,3\},\;
+  \Sigma=\{a,b\},
+\]
+\(\delta((p,q),x)=(\delta^{(1)}(p,x),\delta^{(2)}(q,x))\),
+and accepting states \(F^{(1)}\times F^{(2)}\).
 
 \begin{center}
 \begin{tikzpicture}[->,>=stealth',auto,node distance=2.6cm,semithick]
@@ -568,7 +572,9 @@ where
   \node[state] (23) [below of=11] {\((2,3)\)};
   \node[state] (33) [below right of=31,xshift=0.5cm] {\((3,3)\)};
   \node[state] (32) [below left of=31] {\((3,2)\)};
+
   \draw (22) circle [draw=black,very thick,x radius=0.28cm,y radius=0.28cm];
+
   \path
     (11) edge [above] node {a} (22)
          edge [right] node {b} (43)
@@ -587,63 +593,48 @@ where
 \end{tikzpicture}
 \end{center}
 
-\subsubsection*{Why \(L(A) = L(A^{(1)}) \cap L(A^{(2)})\)?}
+\subsubsection*{Why \(L(A)=L(A^{(1)})\cap L(A^{(2)})\)?}
+\(A\) simulates both in parallel and accepts iff both coordinates are accepting.
 
-By simulating both automata in parallel and accepting exactly when both coordinates are accepting, \(A\) accepts precisely the intersection of their languages.
-
-\subsubsection*{Changing \(\mathbf{A}\) to Obtain Union}
-
-Use the same states and transitions but set
+\subsubsection*{Changing to Obtain Union}
+Use the same transitions but set
 \[
-  F' \;=\; \bigl(F^{(1)}\times Q^{(2)}\bigr)\;\cup\;\bigl(Q^{(1)}\times F^{(2)}\bigr),
+  F' = (F^{(1)}\times Q^{(2)})\;\cup\;(Q^{(1)}\times F^{(2)}),
 \]
 so \(L(A')=L(A^{(1)})\cup L(A^{(2)})\).
 
 \subsection{Exercise 2.2.7}
-
-\textbf{Claim.} If \(q\) satisfies \(\delta(q,a)=q\) for all \(a\), then for any \(w\), \(\delta(q,w)=q\).
+\textbf{Claim.} If \(\delta(q,a)=q\) for all \(a\), then \(\delta(q,w)=q\) for any \(w\).
 
 \textbf{Proof (by induction):}
-\begin{itemize}
-\item Base: \(\delta(q,\varepsilon)=q\).
-\item Step: If \(\delta(q,x)=q\) then
-\[
-  \delta(q,xa) = \delta\bigl(\delta(q,x),a\bigr) = \delta(q,a) = q.
-\]
-\end{itemize}
-Hence \(\delta(q,w)=q\) for all \(w\).
+Base: \(\delta(q,\varepsilon)=q\).  
+Step: \(\delta(q,xa)=\delta(\delta(q,x),a)=\delta(q,a)=q\).
 
 \subsection{Chapter 2.3}
-
 The extended transition function for an NFA,
 \[
   \hat{\delta}(q,\varepsilon)=\{q\},\quad
   \hat{\delta}(q,\,xa)=\bigcup_{p\in\hat{\delta}(q,x)}\delta(p,a),
 \]
-captures nondeterminism by allowing multiple possible next states.  An NFA accepts if any reached state is accepting.  The subset construction converts an NFA \(N\) into a DFA \(D\) whose states are subsets of \(N\)’s states, preserving \(L(D)=L(N)\), albeit with potentially \(2^n\) states.
+captures nondeterminism.  The subset construction converts an NFA \(N\) into a DFA \(D\) whose states are subsets of \(N\)’s states, preserving \(L(D)=L(N)\).
 
 \subsection{Conclusion}
-
-Throughout these problems and readings, we deepened our understanding of deterministic and nondeterministic finite automata: extended transition functions, intersection and union via product constructions, and the subset construction proving NFA–DFA equivalence.
+Throughout these problems and readings, we deepened our understanding of DFAs and NFAs: extended transition functions, intersection/union constructions, and the subset construction proving NFA–DFA equivalence.
 
 \textbf{Interesting question: Maximal Blow-Up in the Subset Construction.}\\
-Describe an \(n\)-state NFA forcing all \(2^n\) subsets to appear in its equivalent DFA, and prove minimality.
+Describe an \(n\)-state NFA forcing all \(2^n\) subsets to appear in its equivalent DFA and prove minimality.
 
+\section{Week 4: Determinization}
 
-\section{Determinization}
-
-\subsection{Introduction}\label{sec:intro}
+\subsection{Introduction}
 In this report, we explore fundamental aspects of both deterministic and nondeterministic finite automata (DFAs and NFAs), including extended transition functions, product automaton construction for intersection, and state modifications for union. We further demonstrate the subset construction to establish the equivalence of NFAs and DFAs, showcasing the broad utility of these automata concepts in both theoretical and practical contexts.
-\newpage
 
-\subsection{Exersizes}\label{sec:week-by-week}
+\subsection{Exercises}
 
-\noindent
 \subsubsection{Homework 1}
-Let $\mathcal{A} = (Q, \Sigma, \delta\colon Q \times \Sigma \to Q, q_0, F)$ be a DFA. Explain in what way you can view $\mathcal{A}$ as an NFA by doing the following:
+Let \(\mathcal{A} = (Q, \Sigma, \delta: Q \times \Sigma \to Q, q_0, F)\) be a DFA. Explain in what way you can view \(\mathcal{A}\) as an NFA by doing the following:
 \begin{enumerate}
-\item Let $\mathcal{A}$ denote the following DFA:
-
+\item Let \(\mathcal{A}\) denote the following DFA:
 \[
 \begin{tikzpicture}[shorten >=1pt,node distance=2.0cm,on grid,auto]
    \node[state, initial] (q1) {1};
@@ -659,7 +650,6 @@ Let $\mathcal{A} = (Q, \Sigma, \delta\colon Q \times \Sigma \to Q, q_0, F)$ be a
 \end{tikzpicture}
 \]
 
-\noindent
 Here:
 \[
 \begin{aligned}
@@ -670,108 +660,70 @@ q_0 &= 1, \quad F = \{3\}, \\
 \delta(3,a) &= 3,\ \delta(3,b) = 3.
 \end{aligned}
 \]
+Explain how you can understand \(\mathcal{A}\) also as an NFA.
 
-Explain how you can understand $\mathcal{A}$ also as an NFA.
-\item More generally, let $\mathcal{A} = (Q, \Sigma, \delta: Q \times \Sigma \to Q, q_0, F)$ be a DFA. Define an NFA
+\item More generally, let \(\mathcal{A} = (Q, \Sigma, \delta: Q \times \Sigma \to Q, q_0, F)\) be a DFA. Define an NFA
 \[
 \mathcal{A}' = (Q', \Sigma, \delta': Q' \times \Sigma \to \mathcal{P}(Q'), q_0', F')
 \]
-such that $L(\mathcal{A}) = L(\mathcal{A}')$.
+such that \(L(\mathcal{A}) = L(\mathcal{A}')\).
+
 \item Justify why your construction satisfies the desired condition.
 \end{enumerate}
 
 \subsubsection*{Solutions}
-
-\paragraph*{1) Viewing the Example DFA as an NFA}
-
+\paragraph{1) Viewing the Example DFA as an NFA}  
 A deterministic finite automaton (DFA) can be seen as a special case of a nondeterministic finite automaton (NFA) by interpreting its transition function in the following way: in an NFA, the transition function 
 \[
 \delta': Q \times \Sigma \to \mathcal{P}(Q)
 \]
-produces \emph{sets} of possible next states. In a DFA, however, for each state $q$ and input symbol $a$, there is exactly one next state $\delta(q,a)$. To view the DFA as an NFA, we simply set:
+produces \emph{sets} of possible next states. In a DFA, however, for each state \(q\) and input symbol \(a\), there is exactly one next state \(\delta(q,a)\). To view the DFA as an NFA, we simply set:
 \[
-\delta'(q,a) \;=\; \{\delta(q,a)\}.
+\delta'(q,a) = \{\delta(q,a)\}.
 \]
-Hence, each transition in the original DFA becomes a transition to a \emph{singleton set} in the NFA. This preserves the language recognized, because in the NFA there is exactly one possible way to move from one state to another on a given symbol (i.e., no extra nondeterminism is introduced).
+Hence, each transition in the original DFA becomes a transition to a \emph{singleton set} in the NFA, preserving the recognized language because no extra nondeterminism is introduced.
 
-Concretely, for the illustrated DFA with states $1,2,3$, we define the NFA with the same states, same start state, same accepting states, and 
-\[
-\delta'(q,a) = \{\delta(q,a)\}\quad\text{and}\quad
-\delta'(q,b) = \{\delta(q,b)\}.
-\]
-
-\paragraph*{2) General Construction from a DFA to an NFA}
-
+\paragraph{2) General Construction from a DFA to an NFA}  
 Given any DFA 
+\(\mathcal{A} = (Q, \Sigma, \delta, q_0, F)\),
+define an NFA
+\(\mathcal{A}' = (Q', \Sigma, \delta', q_0', F')\) by:
 \[
-\mathcal{A} = (Q, \Sigma, \delta, q_0, F),
-\]
-we can define an NFA
-\[
-\mathcal{A}' = (Q', \Sigma, \delta', q_0', F')
-\]
-as follows:
-\begin{itemize}
-\item $Q' = Q$ (we use exactly the same set of states),
-\item $q_0' = q_0$ (same start state),
-\item $F' = F$ (same set of accepting states),
-\item For each $q \in Q$ and $a \in \Sigma$, set $\delta'(q,a) = \{\delta(q,a)\}$. 
-\end{itemize}
-Thus,
-\[
-\delta': Q' \times \Sigma \;\to\; \mathcal{P}(Q'), 
-\quad
-\delta'(q,a) = \bigl\{\delta(q,a)\bigr\}.
+\begin{aligned}
+Q' &= Q,\\
+q_0' &= q_0,\\
+F' &= F,\\
+\delta'(q,a) &= \{\delta(q,a)\} \quad\text{for all }q\in Q,\ a\in\Sigma.
+\end{aligned}
 \]
 
-\paragraph*{3) Why $L(\mathcal{A}) = L(\mathcal{A}')$?}
-
-The language recognized by a DFA is determined by the unique run from $q_0$ on any input string. In the constructed NFA, there is still exactly one possible transition at each step (the singleton set). So:
+\paragraph{3) Why \(L(\mathcal{A}) = L(\mathcal{A}')\)?}  
+Because each step in the DFA corresponds to a unique singleton transition in the NFA:
 \begin{itemize}
-\item If a string $w$ is accepted by the original DFA $\mathcal{A}$, then following the same path in $\mathcal{A}'$ is not only possible but is in fact the \emph{only} path. Thus $w$ is also accepted by $\mathcal{A}'$.
-\item If a string $w$ is not accepted by the original DFA, then there is no way to reach an accepting state via $\delta$; hence in the NFA $\delta'$, which mimics these transitions in singleton sets, there is equally no path that leads to an accepting state.
+  \item If a string \(w\) is accepted by the DFA, the identical path exists in the NFA.
+  \item If a string \(w\) is rejected by the DFA, no path in the NFA leads to acceptance.
 \end{itemize}
-Therefore, the two automata accept exactly the same set of strings, i.e., $L(\mathcal{A}) = L(\mathcal{A}')$.
+Thus the two automata recognize the same language.
 
 \subsubsection{Homework 2}
-
 \begin{enumerate}
-
-\item Describe in words the language $L(A)$ accepted by the NFA $\mathcal{A}$ pictured below.
-
-\item Specify the automaton $\mathcal{A}$ formally in the tuple form 
-\[
-(Q, \Sigma, \delta, q_0, F).
-\]
-
-\item Using the extended transition function $\hat{\delta}$ of $\mathcal{A}$, compute the set of states 
-\[
-\hat{\delta}(q_0,\,10110)
-\]
-step by step.
-
-\item Find \emph{all} paths in $\mathcal{A}$ for the words $v = 1100$ and $w = 1010$. Represent each set of paths in a common diagram.
-
-\item Construct the determinization $\mathcal{A}^D$ (the ``power set automaton'') of $\mathcal{A}$.
-
-\item Verify that $L(\mathcal{A}) = L(\mathcal{A}^D)$.  Is there a smaller DFA that accepts the same language?
-
+  \item Describe in words the language \(L(\mathcal{A})\) accepted by the NFA \(\mathcal{A}\) pictured below.
+  \item Specify the automaton \(\mathcal{A}\) formally as \((Q,\Sigma,\delta,q_0,F)\).
+  \item Using the extended transition function \(\hat{\delta}\), compute \(\hat{\delta}(q_0,10110)\) step by step.
+  \item Find \emph{all} paths in \(\mathcal{A}\) for \(v=1100\) and \(w=1010\); represent each set of paths.
+  \item Construct the determinization \(\mathcal{A}^D\) (power-set automaton) of \(\mathcal{A}\).
+  \item Verify \(L(\mathcal{A}) = L(\mathcal{A}^D)\). Is there a smaller DFA for the same language?
 \end{enumerate}
 
-\bigskip
-\hrule
-\bigskip
-
-\paragraph*{Solutions}
-
-Below is the NFA $\mathcal{A}$:
+\subsubsection*{Solutions}
+Below is the NFA \(\mathcal{A}\):
 
 \begin{center}
 \begin{tikzpicture}[shorten >=1pt,node distance=2.2cm,on grid,auto]
-   \node[state, initial] (q0) {$q_0$};
-   \node[state] (q1) [right=of q0] {$q_1$};
-   \node[state] (q2) [right=of q1] {$q_2$};
-   \node[state, accepting] (q3) [right=of q2] {$q_3$};
+   \node[state, initial] (q0) {\(q_0\)};
+   \node[state] (q1) [right=of q0] {\(q_1\)};
+   \node[state] (q2) [right=of q1] {\(q_2\)};
+   \node[state, accepting] (q3) [right=of q2] {\(q_3\)};
 
    \path[->]
    (q0) edge[loop above] node {0,1} (q0)
@@ -783,370 +735,356 @@ Below is the NFA $\mathcal{A}$:
 \end{tikzpicture}
 \end{center}
 
-\subparagraph*{1) Language Description}
-Intuitively, the automaton $\mathcal{A}$ accepts exactly those binary strings for which there is a path from $q_0$ to the accepting state $q_3$.  
-\begin{itemize}
-\item A necessary part of reaching $q_3$ is taking the transition $q_2 \xrightarrow{0} q_3$. 
-\item To get to $q_2$ in the first place, we must have used $q_1 \xrightarrow{1} q_2$. 
-\item And to get to $q_1$, we must have used $q_0 \xrightarrow{1} q_1$ on some occurrence of the symbol 1 (rather than looping back to $q_0$ on that same~1).
-\end{itemize}
-Hence there must be at least two consecutive 1's used \emph{as the path} $q_0 \to q_1 \to q_2$, and then at least one 0 from $q_2$ to $q_3$.  Because $q_0$ loops on $\{0,1\}$, those symbols can appear arbitrarily often before the transition $q_0\to q_1$ is finally taken on a 1.  And from $q_2$, we can read a 0 that returns us to $q_1$ (followed by a 1 that goes back to $q_2$), repeatedly.  Eventually, a 0 from $q_2$ must go to $q_3$, after which any further symbols are accepted by the loop in $q_3$.  
+\paragraph{1) Language Description}  
+\(\mathcal{A}\) accepts exactly those binary strings that can nondeterministically traverse  
+\(q_0\to q_1\to q_2\) on two 1’s and then take a 0 to \(q_3\), after which any symbols are allowed.
 
-In simpler terms: $\mathcal{A}$ accepts all binary strings that, \emph{on some nondeterministic choice of transitions}, contain two consecutive 1's used specifically to go from $q_0$ to $q_1$ to $q_2$, and eventually at least one 0 from $q_2$ to $q_3$.  After that point, the rest of the string can be anything.  
-
-\subparagraph*{2) Formal NFA Specification }
-We specify $\mathcal{A}$ as:
+\paragraph{2) Formal Specification}  
 \[
-\mathcal{A} \;=\; (\,Q,\;\Sigma,\;\delta,\;q_0,\;F\,),
+\mathcal{A} = (Q,\Sigma,\delta,q_0,F),
+\quad
+Q=\{q_0,q_1,q_2,q_3\},\;\Sigma=\{0,1\},\;F=\{q_3\},
 \]
-where:
+with
 \[
 \begin{aligned}
-Q &= \{\,q_0,q_1,q_2,q_3\},\\
-\Sigma &= \{\,0,1\},\\
-q_0 &= q_0 \text{ (the start state)},\\
-F &= \{\,q_3\},\\
-\delta(q_0,0) &= \{\,q_0\},\quad \delta(q_0,1) \;=\; \{\,q_0,\;q_1\},\\
-\delta(q_1,0) &= \varnothing,\quad \delta(q_1,1) \;=\; \{\,q_2\},\\
-\delta(q_2,0) &= \{\,q_1,\;q_3\},\quad \delta(q_2,1) \;=\; \varnothing,\\
-\delta(q_3,0) &= \{\,q_3\},\quad \delta(q_3,1) \;=\; \{\,q_3\}.
+\delta(q_0,0)&=\{q_0\},\;\delta(q_0,1)=\{q_0,q_1\},\\
+\delta(q_1,1)&=\{q_2\},\;\delta(q_1,0)=\varnothing,\\
+\delta(q_2,0)&=\{q_1,q_3\},\;\delta(q_2,1)=\varnothing,\\
+\delta(q_3,a)&=\{q_3\}\quad(a\in\{0,1\}).
 \end{aligned}
 \]
 
-\subparagraph*{3) Extended Transition Function on 10110}
-Recall that the extended transition function $\hat{\delta}(r,x)$ for a state $r$ and input string $x$ returns \emph{all} possible states reachable from $r$ by reading $x$.  We compute 
+\paragraph{3) Extended Transition on 10110}  
+\(\hat{\delta}(q_0,\varepsilon)=\{q_0\}\),  
+\(\hat{\delta}(q_0,1)=\{q_0,q_1\}\),  
+\(\hat{\delta}(\{q_0,q_1\},0)=\{q_0\}\),  
+\(\hat{\delta}(\{q_0\},1)=\{q_0,q_1\}\),  
+\(\hat{\delta}(\{q_0,q_1\},1)=\{q_0,q_1,q_2\}\).
+
+\paragraph{4) All Paths for 1100 and 1010}  
+Branches arise at each nondeterministic choice; any accepting path must include  
+\(q_0\xrightarrow{1}q_1\xrightarrow{1}q_2\xrightarrow{0}q_3\).
+
+\paragraph{5) Determinization (Power-Set)}  
 \[
-\hat{\delta}(q_0,\,10110)
+Q^D=\mathcal{P}(Q),\;
+q_0^D=\{q_0\},\;
+F^D=\{S:S\cap\{q_3\}\neq\varnothing\},\;
+\delta^D(S,a)=\bigcup_{s\in S}\delta(s,a).
 \]
-symbol by symbol:
-\[
-\begin{aligned}
-\hat{\delta}(q_0,\epsilon) &= \{\,q_0\},\\
-\hat{\delta}(q_0,1) &= \delta(q_0,1) = \{\,q_0,q_1\},\\
-\hat{\delta}(\{q_0,q_1\},0) 
-  &= \delta(q_0,0)\;\cup\;\delta(q_1,0) 
-  = \{\,q_0\}\;\cup\;\varnothing 
-  = \{\,q_0\},\\
-\hat{\delta}(\{q_0\},1)
-  &= \delta(q_0,1) 
-  = \{\,q_0,q_1\},\\
-\hat{\delta}(\{q_0,q_1\},1)
-  &= \delta(q_0,1) \;\cup\;\delta(q_1,1) 
-  = \{\,q_0,q_1\}\;\cup\;\{\,q_2\} 
-  = \{\,q_0,q_1,q_2\}.
-\end{aligned}
-\]
-Thus after reading \texttt{10110}, the set of possible states is $\{\,q_0,q_1,q_2\}$.  
-(Note: if we continued with another symbol, we would then look at transitions from each state in $\{q_0,q_1,q_2\}$ on that symbol.)
 
-\subparagraph*{4) All Paths for \texttt{v=1100} and \texttt{w=1010}}
+\paragraph{6) Verification \& Minimization}  
+By construction \(L(\mathcal{A}^D)=L(\mathcal{A})\). The resulting DFA can then be minimized via standard algorithms.
 
-\subparagraph{All paths for \texttt{1100}.}
-Starting in $q_0$ and reading \texttt{1100} step by step:
-\[
-\begin{aligned}
-&\text{From }q_0\text{ on first `1':}\\
-&\quad q_0 \;\xrightarrow{1}\; q_0 \quad\text{or}\quad q_0 \;\xrightarrow{1}\; q_1.\\[6pt]
-&\text{Then on second `1':}\\
-&\quad \text{if the first transition stayed in }q_0\text{, we again have }q_0 \;\xrightarrow{1}\; \{q_0,q_1\},\\
-&\quad \text{if the first transition went to }q_1\text{, we must go }q_1 \;\xrightarrow{1}\; q_2.\\[6pt]
-&\text{Then on first `0':}\\
-&\quad \dots 
-\end{aligned}
-\]
-One can systematically draw out the branching paths.  Eventually, any path that leads to $q_3$ must include the sub-path 
-\[
-q_0 \xrightarrow{1} q_1 \xrightarrow{1} q_2 \xrightarrow{0} q_3
-\]
-at some stage.
+\newpage
 
-\subparagraph{All paths for \texttt{1010}.}
-A similar analysis shows that from $q_0$ on `1' we can stay in $q_0$ or move to $q_1$.  Then reading `0', etc.  You can depict these paths in a common diagram with branches for each nondeterministic choice.
-
-\subparagraph*{5) Determinization via Power Set Construction}
-Define $\mathcal{A}^D = (Q^D,\,\Sigma,\,\delta^D,\,q_0^D,\,F^D)$ by:
-\[
-\begin{aligned}
-Q^D &= \mathcal{P}(Q) = \{\varnothing,\;\{q_0\},\;\{q_1\},\;\dots,\;\{q_0,q_1\},\;\dots,\;\{q_0,q_1,q_2,q_3\},\dots\},\\
-q_0^D &= \{q_0\},\\
-F^D &= \{\,S \subseteq Q : S \cap \{q_3\} \neq \varnothing\},\\
-\delta^D(S, a) &= \bigcup_{s \in S} \delta(s,a).
-\end{aligned}
-\]
-Starting from $\{q_0\}$, compute systematically $\delta^D(\{q_0\},0)$, $\delta^D(\{q_0\},1)$, and so forth.  You will obtain a transition table with subsets of $Q$ as states, and those subsets containing $q_3$ are accepting.
-
-\subparagraph*{6) Verification \& Minimization}
-\begin{itemize}
-\item By construction, $\mathcal{A}^D$ accepts exactly the same language as $\mathcal{A}$, i.e.\ $L(\mathcal{A}^D) = L(\mathcal{A})$.
-\item Often, the power-set DFA can be minimized further.  One can apply the usual DFA minimization algorithm (Myhill-Nerode or partition-refinement).  In general, yes, there will be a smaller DFA than $\mathcal{A}^D$ that still accepts the same language.
-\end{itemize}
-
-\subsection{Chapter 3}
-
-Chapter 3 introduces regular expressions, a notation for describing languages. They define exactly the same languages as nondeterministic finite automata (NFAs) but can be more user-friendly. This chapter details union, concatenation, and Kleene star operations, common in text search tools and lexical analyzers. Regular expressions share the same expressive power as NFAs, DFAs, and $\epsilon$-NFAs, collectively forming the class of regular languages. They obey algebraic laws like arithmetic, but with important differences. We cover closure, which repeatedly concatenates elements of a language, often producing infinite sets. Examples illustrate how regular expressions describe patterns like strings with at least one special symbol or alternating bits. The chapter explains the equivalence between DFAs and regular expressions: any regular expression can be converted to an NFA (then to a DFA), and any DFA can be transformed into a regular expression via state elimination. This fundamental equivalence underpins tools like \texttt{grep}, \texttt{lex}, and compilers, using regular expressions to specify tokens or locate patterns in textual input.
-
-\subsection{Conclusion}
-
-Throughout these problems and discussions, we expanded our grasp of the fundamental principles behind both deterministic and nondeterministic finite automata. We learned to use extended transition functions to formalize how automata parse and accept entire strings. We also constructed product automata to find the intersection of two languages and modified acceptance states to find unions. Most prominently, we employed the subset (power set) construction, which provides a systematic method for converting any NFA into a DFA that recognizes exactly the same language. Taken together, these core concepts highlight the depth and versatility of finite automata theory—critical not only in classical computability and formal language theory but also in practical applications such as lexical analysis, pattern matching, and software validation.
-
-\textbf{ Interesting question: Efficiency of regular expressions.}
-How do regular expressions compare in efficiency to finite automata when processing large-scale pattern-matching tasks, such as those in search engines or language analyzers?
-
-\section{Automata Theory - Equivalence and Minimization of Automata}
-
-\subsection{Introduction}\label{sec:intro}
-This report focuses on Equivalence and Minimization of Automata, covering the process of determining whether two different DFA representations define the same language and how to construct the smallest possible DFA that accepts a given regular language. The table-filling algorithm is introduced as a systematic way to check equivalence of states within a DFA by distinguishing them through input strings. This allows us to merge equivalent states, reducing the number of states while preserving language recognition. We also examine the uniqueness of the minimal DFA and its theoretical guarantees. Finally, the report discusses the complexity of these procedures and their implications for automata design.
-
-\subsection{Chapter 4.4}
-Chapter 4.4 covers the equivalence and minimization of automata, focusing on the problem of determining whether two descriptions of regular languages define the same language. The chapter introduces the table-filling algorithm, a method to determine when two states of a DFA are equivalent by examining how they transition on different input strings. If two states lead to the same accepting or rejecting states for all possible inputs, they are considered equivalent and can be merged into a single state. If not, they are distinguishable. This process allows us to construct a minimal DFA, the smallest DFA that accepts a given language. The minimization process follows a structured approach: (1) eliminate unreachable states, (2) partition the remaining states into equivalence classes, and (3) construct a new DFA where each equivalence class represents a single state. A key result of this approach is that the minimal DFA is unique up to renaming of states, meaning that any two minimal DFAs for the same language will have the same structure. The chapter also explores the complexity of minimization, showing that the table-filling algorithm runs in \(O(n^2)\) time, where \(n\) is the number of states. Additionally, the chapter presents an alternative perspective on DFA equivalence testing by constructing a combined DFA from two different automata and checking whether their start states are equivalent. If they are, the two original DFAs define the same language. The final part of the chapter discusses NFA minimization, explaining why the same state-equivalence method does not necessarily produce a minimal NFA, as NFAs can have multiple transitions for the same input, which complicates state merging. An example is provided where an NFA remains the same size despite attempting to group equivalent states, highlighting the limitations of direct minimization techniques. The chapter concludes by proving the optimality of DFA minimization, showing that no DFA with fewer states than the minimal DFA can accept the same language. This is done by assuming a smaller DFA exists and deriving a contradiction using state distinguishability. This guarantees that the table-filling method produces the smallest possible DFA, making it a fundamental tool in automata theory.
-
-\subsection{Exercises}\label{sec:exercises}
-\textbf{Note:} The following exercises test our understanding of state equivalence, DFA minimization, and the application of the table-filling algorithm.
-
-% [Exercises will be added here once provided] i think this is a leftover comment from the template I used, I should come back and read through when I am done formatting
-
-\subsection{Conclusion}
-In this report, we explored methods for testing equivalence of automata and minimizing DFAs using the table-filling algorithm. We demonstrated how equivalent states can be merged into a unique minimal DFA, ensuring that no smaller DFA exists for the same language. The minimization process not only reduces computational complexity but also provides theoretical guarantees regarding DFA uniqueness. Additionally, we saw that while DFAs have a well-defined minimization process, NFAs do not always exhibit the same behavior, requiring different optimization techniques. These concepts are fundamental in automata theory, with practical applications in compiler design, pattern recognition, and language processing.
-
-\section{Equivalence and Minimization of Automata}
+\section{Week 5: Equivalence and Minimization of Automata}
 
 \subsection{Introduction}
-This report explores foundational concepts in automata theory, focusing on equivalence and minimization of deterministic finite automata (DFA). The reading from Section 4.4 of \emph{Introduction to Automata, Languages, and Computation} presents the table‐filling algorithm used to determine state equivalence and to test language equivalence. These tools are then applied to minimize DFAs to their smallest equivalent representations. Exercises from Sections 3.2 and 4.4 consolidate understanding through practical application.
+This report focuses on Equivalence and Minimization of Automata, covering the process of determining whether two different DFA representations define the same language and how to construct the smallest possible DFA that accepts a given regular language. The table‐filling algorithm is introduced as a systematic way to check equivalence of states within a DFA by distinguishing them through input strings. This allows us to merge equivalent states, reducing the number of states while preserving language recognition. We also examine the uniqueness of the minimal DFA and its theoretical guarantees. Finally, the report discusses the complexity of these procedures and their implications for automata design.
 
-\subsection{Reading Summary: Section 4.4 – Equivalence and Minimization of Automata}
-
-\subsubsection*{4.4.1 Testing Equivalence of States}
-The **table-filling algorithm** is introduced to determine whether pairs of states in a DFA are distinguishable. It works by marking all pairs where one state is accepting and the other is not (basis), then iteratively marking pairs whose successors on some input are already marked (induction). If a pair remains unmarked, the states are equivalent.
-
-\subsubsection*{4.4.2 Testing Equivalence of Regular Languages}
-To test whether two regular languages are equal, convert each to a DFA, then use the table-filling algorithm to compare their start states. If the start states are equivalent, the languages are the same.
-
-\subsubsection*{4.4.3 Minimization of DFAs}
-The table-filling algorithm can be used to minimize a DFA by merging all equivalent states into single states. The minimized DFA is unique (up to renaming) and has the fewest possible states for that language.
-
-\subsubsection*{4.4.4 Why the Minimized DFA Can’t Be Beaten}
-A proof by contradiction shows that no DFA with fewer states than the minimized DFA can accept the same language. Thus, the minimized DFA is optimal in size.
-
-\subsection{Exercises from Section 3.2}
-
-\subsubsection*{Exercise 3.2.1}
-\begin{enumerate}[label=\alph*)]
-  \item Give all the regular expressions \(R^{(0)}_{ij}\).  
-  \item Give all the regular expressions \(R^{(1)}_{ij}\).  
-  \item Give all the regular expressions \(R^{(2)}_{ij}\).  
-  \item Give a regular expression for the language of the automaton.  
-  \item Construct the transition diagram and eliminate state \(q_2\).  
+\subsection{Chapter 4.4 – Equivalence and Minimization of Automata}
+Chapter 4.4 covers the equivalence and minimization of automata, focusing on the problem of determining whether two descriptions of regular languages define the same language. The chapter introduces the table‐filling algorithm, a method to determine when two states of a DFA are equivalent by examining how they transition on different input strings. If two states lead to the same accepting or rejecting states for all possible inputs, they are considered equivalent and can be merged into a single state. If not, they are distinguishable. This process allows us to construct a minimal DFA, the smallest DFA that accepts a given language. The minimization process follows a structured approach:
+\begin{enumerate}
+  \item Eliminate unreachable states.
+  \item Partition the remaining states into equivalence classes.
+  \item Construct a new DFA where each equivalence class represents a single state.
 \end{enumerate}
+A key result is that the minimal DFA is unique up to renaming of states. The chapter also explores the complexity of minimization, showing that the table‐filling algorithm runs in \(O(n^2)\) time. Additionally, it presents an alternative perspective on DFA equivalence testing by constructing a combined DFA from two automata and checking equivalence of their start states. The final part discusses NFA minimization and its inherent difficulties compared to DFAs, highlighting limitations of direct state‐equivalence methods for NFAs.
 
-\subsubsection*{Exercise 3.2.2}
-\begin{enumerate}[label=\alph*)]
-  \item Initial values for \(R^{(0)}_{ij}\).  
-  \item Compute \(R^{(1)}_{ij}\).  
-  \item Compute \(R^{(2)}_{ij}\).  
-  \item With all three states usable, express the language via \(R^{(3)}_{1,3}\).  
-\end{enumerate}
+\subsection{Exercises}
+\textbf{Note:} The following exercises test understanding of state equivalence, DFA minimization, and nonregularity proofs.
 
-\subsection{Exercises from Section 4.4}
-
-\subsubsection*{Exercise 4.4.1}
-**Exercise 4.4.1:** In Fig. 4.14 is the transition table of a DFA.
-\begin{enumerate}[label=\alph*)]
-  \item Draw the table of distinguishabilities for this automaton.
-  \item Construct the minimum-state equivalent DFA.
-\end{enumerate}
-
-Figure 4.14 DFA:
+\subsubsection{Exercise 3.2.1}
+Here is the DFA’s transition table:
 \[
-\begin{array}{r||c|c|}
-  & 0 & 1 \\
-  \hline\hline
-  \rightarrow A & B & A \\
-  B & A & C \\
-  C & D & B \\
-  *D & D & A \\
-  E & D & F \\
-  F & G & E \\
-  G & F & G \\
-  H & G & D \\
+\begin{array}{c|cc}
+     &0&1\\\hline
+\to q_1 & q_2 & q_1\\
+      q_2 & q_3 & q_1\\
+*\,q_3 & q_3 & q_2
 \end{array}
 \]
-
-\subsubsection*{Exercise 4.4.2}
-**Exercise 4.4.2:** Repeat Exercise 4.4.1 for the DFA of Fig. 4.15.
-\begin{enumerate}[label=\alph*)]
-  \item Draw the table of distinguishabilities for this automaton.
-  \item Construct the minimum-state equivalent DFA.
-\end{enumerate}
-
-Figure 4.15 DFA:
+\paragraph{(a) \(R_{ij}^{(0)}\)}
 \[
-\begin{array}{r||c|c|}
-  & 0 & 1 \\
-  \hline\hline
-  \rightarrow A & B & E \\
-  B & C & F \\
-  *C & D & H \\
-  D & E & H \\
-  E & F & I \\
-  *F & G & B \\
-  G & H & B \\
-  H & I & C \\
-  *I & A & E \\
+\begin{array}{c|ccc}
+R_{ij}^{(0)} & j=1 & j=2 & j=3\\\hline
+i=1 & \varepsilon\cup1 & 0 & \varnothing\\
+i=2 & 1 & \varnothing & 0\\
+i=3 & \varnothing & 1 & \varepsilon\cup0
 \end{array}
 \]
+\paragraph{(b) \(R_{ij}^{(1)}\)}
+\[
+\begin{array}{c|ccc}
+R_{ij}^{(1)} & j=1 & j=2 & j=3\\\hline
+i=1 & 1^* & 1^*0 & \varnothing\\
+i=2 & 1^+ & 1^+0 & 0\\
+i=3 & \varnothing & 1 & \varepsilon\cup0
+\end{array}
+\]
+\paragraph{(c) \(R_{ij}^{(2)}\)}
+\[
+\begin{array}{c|ccc}
+R_{ij}^{(2)} & j=1 & j=2 & j=3\\\hline
+i=1 & 1^*\cup1^*0\,(0+1)^*\,1^+ 
+      & 1^*0 
+      & 1^*0\,(0+1)^*\,0\\
+i=2 & 1^+ & 1^+0 & 0\\
+i=3 & \varnothing & 1 & \varepsilon\cup0
+\end{array}
+\]
+\paragraph{(d) Regular expression}
+\[
+(1 + 01)^*\,00\,(0 + 10)^*.
+\]
+
+\subsubsection{Exercise 3.2.2}
+\[
+\begin{array}{c|cc}
+     &0&1\\\hline
+\to q_1 & q_2 & q_3\\
+      q_2 & q_1 & q_3\\
+*\,q_3 & q_2 & q_1
+\end{array}
+\]
+\paragraph{(a) \(R_{ij}^{(0)}\)}
+\[
+\begin{array}{c|ccc}
+R_{ij}^{(0)} & j=1 & j=2 & j=3\\\hline
+i=1 & \varepsilon & 0 & 1\\
+i=2 & 0 & \varepsilon & 1\\
+i=3 & 1 & 0 & \varepsilon
+\end{array}
+\]
+\paragraph{(b) \(R_{ij}^{(1)}\)}
+\[
+\begin{array}{c|ccc}
+R_{ij}^{(1)} & j=1 & j=2 & j=3\\\hline
+i=1 & \varepsilon & 0 & 1\\
+i=2 & 0 & \varepsilon\cup00 & 1\cup01\\
+i=3 & 1 & 0\cup10 & \varepsilon\cup11
+\end{array}
+\]
+\paragraph{(c) \(R_{13}^{(2)}\)}
+\[
+R_{13}^{(2)} = 1 \;\cup\;0\,(00)^*\,(1+01).
+\]
+\paragraph{(d) Regular expression}
+\[
+1 \;+\;0\,(00)^*\,(1+01).
+\]
+
+\subsubsection{Exercise 4.1.1}
+Prove the following languages are not regular using the pumping lemma:
+
+\paragraph{(a) \(\{0^n1^n\mid n\ge1\}\)}
+\textbf{Proof.} Let \(p\) be the pumping length. Consider \(s=0^p1^p\). Any decomposition \(s=xyz\) with \(\lvert xy\rvert\le p\) forces \(y=0^k\) for some \(k\ge1\). Pumping down (\(i=0\)) yields \(0^{p-k}1^p\), which has fewer 0s than 1s, so \(0^{p-k}1^p\notin L\). Contradiction.
+
+\paragraph{(b) Balanced parentheses}
+\textbf{Proof.} Let \(p\) be the pumping length and take 
+\[
+s = (\underbrace{( \dots (}_{p}\underbrace{) \dots )}_{p}).
+\]
+Then \(\lvert s\rvert\ge p\), and any decomposition \(s=xyz\) with \(\lvert xy\rvert\le p\) has \(y\) consisting only of “(”. Pumping down removes some “(” while leaving all “)”, yielding an unbalanced string. Contradiction.
+
+\paragraph{(c) \(\{0^n1\,0^n\mid n\ge1\}\)}
+\textbf{Proof.} Let \(s=0^p1\,0^p\). Any \(s=xyz\) with \(\lvert xy\rvert\le p\) again gives \(y=0^k\). Pumping down produces \(0^{p-k}1\,0^p\), which no longer has equal numbers of leading and trailing 0s. Contradiction.
+
+\paragraph{(d) \(\{0^n1^m2^n\mid n,m\ge0\}\)}
+\textbf{Proof.} Take \(s=0^p1\,2^p\). Decomposition \(s=xyz\) with \(\lvert xy\rvert\le p\) yields \(y=0^k\). Pumping down yields fewer 0s than 2s (\(0^{p-k}1\,2^p\)), so not in the language. Contradiction.
+
+\paragraph{(e) \(\{0^n1^m\mid n\le m\}\)}
+\textbf{Proof.} Let \(s=0^p1^p\). Any initial segment \(y\) lies in the 0-block; pumping up (\(i=2\)) gives \(0^{p+k}1^p\) with more 0s than 1s, violating \(n\le m\). Contradiction.
+
+\paragraph{(f) \(\{0^n1^{2n}\mid n\ge1\}\)}
+\textbf{Proof.} Let \(s=0^p1^{2p}\). Decompose \(s=xyz\) with \(\lvert xy\rvert\le p\), so \(y=0^k\). Pumping down yields \(0^{p-k}1^{2p}\), where \(2(p-k)\neq2p\), so string is rejected. Contradiction.
+
+\subsubsection{Exercise 4.1.2}
+Prove the following are not regular by the pumping lemma:
+
+\paragraph{(a) \(\{0^n\mid n\text{ is a perfect square}\}\)}
+\textbf{Proof.} Let \(p\) be the pumping length and \(s=0^{p^2}\). Any decomposition with \(\lvert xy\rvert\le p\) has \(y=0^k\), \(1\le k\le p\). Pumping up gives a length \(p^2 + (i-1)k\) strictly between \(p^2\) and \((p+1)^2\), not a square. Contradiction.
+
+\paragraph{(b) \(\{0^n\mid n\text{ is a perfect cube}\}\)}
+\textbf{Proof.} Same idea: the gap between consecutive cubes exceeds the maximum pump size \(p\).
+
+\paragraph{(c) \(\{0^n\mid n\text{ is a power of 2}\}\)}
+\textbf{Proof.} Between \(2^p\) and \(2^{p+1}\) there is no other power of two, and pumping by at most \(p\) cannot reach \(2^{p+1}\).
+
+\paragraph{(d) Strings of length a perfect square}
+\textbf{Proof.} Same as (a) but phrased in terms of string length.
+
+\paragraph{(e) \(\{ww\mid w\in\{0,1\}^*\}\)}
+\textbf{Proof.} Let \(s=ww\) where \(\lvert w\rvert=p\). Decompose in the first \(p\) symbols; pumping alters only the first half, breaking equality of halves.
+
+\paragraph{(f) \(\{ww^R\mid w\in\{0,1\}^*\}\)}
+\textbf{Proof.} Let \(s= w w^R\) with \(\lvert w\rvert=p\). Any pump in the first block misaligns the mirror image.
+
+\paragraph{(g) \(\{w\bar w\mid w\in\{0,1\}^*\}\)}
+\textbf{Proof.} Similar: pumping in \(w\) changes its length, so it no longer matches \(\bar w\).
+
+\paragraph{(h) \(\{w1^n\mid |w|=n\}\)}
+\textbf{Proof.} Let \(s=0^p1^p\). Pumping in the 0-block yields \(|w|\neq n\), so no longer in the language.
+
+\subsection{Interesting Question}
+\textbf{Question:}  
+\emph{Is there a polynomial-time algorithm for minimizing NFAs? If not, what makes NFA minimization so much harder than DFA minimization?}
 
 \subsection{Conclusion}
-This report explored foundational concepts in the theory of regular languages and deterministic finite automata (DFAs), particularly focusing on equivalence and minimization of automata. Through readings and exercises, we examined the table-filling algorithm for state equivalence, constructed regular expressions from transition tables, and performed DFA minimization with concrete examples.
+In this report, we explored methods for testing equivalence of automata and minimizing DFAs using the table-filling algorithm. We demonstrated how equivalent states can be merged into a unique minimal DFA, ensuring that no smaller DFA exists for the same language. We also applied the pumping lemma to rigorously prove that a wide variety of languages are not regular. These concepts are fundamental in automata theory, with applications in compiler design, pattern recognition, and formal verification.
 
-**Question:** How can we tell if two states are representing the same thing? Can there be multiple states reached by the same language?
+\newpage
 
-\section{Turing Machines TODO: ADD TURING MACHINE CODE}
+\section{Weeks 6 and 7: Turing Machines and Decidability}
 
-\subsection{Introduction}
-This report explores the fundamental limits of computation by first illustrating, in Section 8.1, a concrete “hello–world” problem that no program can decide, motivating the need for a simpler, formal model. Section 8.2 then introduces the Turing machine—a finite control with an infinite read/write tape—and shows how its precise notation enables rigorous proofs of undecidability and intractability across domains. Building on this, Section 9.1 defines the diagonalization language \(L_{d}\), consisting of those machine–input pairs where the machine does not accept its own code, and proves \(L_{d}\) is not even recursively enumerable. Finally, Section 9.2 examines the universal language \(L_{u}\), which is semi-decidable by simulating any encoded Turing machine on its input, yet cannot be decided by any halting algorithm, thereby delineating the distinction between recursive (decidable) and merely RE (semi-decidable) problems.
+\subsection*{Reading}
 
-\subsection*{Summary of Reading}
+In this unit we introduce the Turing machine model (Section 8.2) and use it to prove fundamental limits of computation:  
+\begin{itemize}
+  \item Section 8.1 motivates undecidability via “hello–world” detection.  
+  \item Section 9.1 defines the diagonal language 
+    \[
+      L_{d} = \{\,w_i \mid w_i \notin L(M_i)\},
+    \]
+    showing it is not even r.e.  
+  \item Section 9.2 studies the universal language 
+    \[
+      L_{u} = \{\langle M,w\rangle \mid M\text{ accepts }w\},
+    \]
+    proving it is r.e.\ but not decidable.  
+\end{itemize}
 
-\subsubsection*{8.1 Problems That Computers Cannot Solve}
-The purpose of this section is to provide an informal, C-programming-based introduction to the proof of a specific problem that computers cannot solve.
+\subsection*{Exercises}
 
-The particular problem we discuss is whether the first thing a C program prints is \emph{hello, world}. Although we might imagine that simulation of the program would allow us to tell what the program does, we must in reality contend with programs that take an unimaginably long time before making any output at all. This problem— not knowing when, if ever, something will occur— is the ultimate cause of our inability to tell what a program does. However, proving formally that there is no program to do a stated task is quite tricky, and we need to develop some formal mechanics. In this section, we give the intuition behind the formal proofs.
+\subsubsection*{Exercise A: Constructing Turing Machines}
 
-\subsubsection*{8.2 The Turing Machine}
-The theory of undecidable and intractable problems not only shows that certain questions (such as whether a C program ever prints “hello, world”) have no algorithmic solution, but also highlights that many decidable problems require impractical amounts of time. To address everyday questions in domains beyond direct program analysis—grammar ambiguity, Boolean-formula satisfiability, etc.—we introduce the Turing machine: a mathematically precise model consisting of a finite control and a single infinite tape on which symbols can be read, written, and the head moved left or right. Because its configurations can be described succinctly, the Turing machine enables formal proofs of undecidability and intractability where real-world program states are too complex to handle.
+\textbf{Problem.}  Over the alphabet \(\{0,1\}\) with blank symbol \texttt{\_}, design three machines:
 
-Using Turing machines, we can show that problems like Post’s Correspondence are undecidable and that many natural decision problems are intractable despite being decidable. The fact that Turing machines compute exactly the same class of functions as other models (partial-recursive functions, lambda calculus, and modern computers) underpins the Church–Turing thesis, giving us a unified framework for understanding what can—and cannot—be computed in practice.
+\begin{enumerate}
+  \item \(M_{1}\) accepts \(\{1\,0^n\mid n\ge0\}\) and on input \(1\,0^n\) rewrites it to \(1\,0^{n+1}\) then halts in the accept state.
+  \item \(M_{2}\) accepts \(\{1\,0^n\mid n\ge0\}\) and on input \(1\,0^n\) erases all zeros, leaving only a single `1', then halts accept.
+  \item \(M_{3}\) accepts every binary string and on any input flips each `0' to `1' and each `1' to `0', then halts accept.
+\end{enumerate}
 
-\subsubsection*{9.1 A Language That Is Not Recursively Enumerable}
-We begin by coding every binary string as both a potential Turing machine and its own input, so that the “ith” string \(w_i\) corresponds to the “ith” machine \(M_i\). Define the diagonalization language  
+Paste each of the following into the simulator (use verbatim mode), compile, and run:
+
+\bigskip
+\noindent\textbf{Machine \texttt{M1\_Increment}}  
+\begin{verbatim}
+name: M1_Increment
+init: q0
+accept: q_accept
+
+q0,1
+q1,1,>
+q1,0
+q1,0,>
+q1,_
+q2,0,<
+q2,0
+q2,0,<
+q2,1
+q_accept,1,-
+\end{verbatim}
+
+\newpage
+
+\bigskip
+\noindent\textbf{Machine \texttt{M2\_EraseZeros}}  
+\begin{verbatim}
+name: M2_EraseZeros
+init: q0
+accept: q_accept
+
+q0,1
+q1,1,>
+q1,0
+q1,_,<
+q2,_,<
+q2,1
+q_accept,1,-
+\end{verbatim}
+
+\bigskip
+\noindent\textbf{Machine \texttt{M3\_SwapBits}}  
+\begin{verbatim}
+name: M3_SwapBits
+init: q0
+accept: q_accept
+
+q0,0
+q0,1,>
+q0,1
+q0,0,>
+q0,_
+q_accept,_,-
+\end{verbatim}
+
+\bigskip
+\subsubsection*{Exercise 1: Halting-Related Languages}
+
+Classify each language as decidable, r.e.\ only, or co-r.e.\ only:
 \[
-L_d = \{\,w_i \mid w_i\notin L(M_i)\,\},
+\begin{aligned}
+L_1 &= \{\,M \mid M\text{ halts on its own encoding}\},\\
+L_2 &= \{(M,w)\mid M\text{ halts on input }w\},\\
+L_3 &= \{(M,w,k)\mid M\text{ halts on }w\text{ within }k\text{ steps}\}.
+\end{aligned}
 \]
-i.e.\ those strings that their corresponding machine does \emph{not} accept. By ordering strings first by length and then lexicographically, and by using a simple delimiter-based encoding for states, tape symbols, and transitions, we ensure every Turing machine with alphabet \(\{0,1\}\) has at least one binary code, and every binary string can be interpreted as some machine (possibly trivial).
+\textbf{Answer.}
+\begin{itemize}
+  \item \(L_1\): r.e.\ but not co-r.e.\ (undecidable).
+  \item \(L_2\): r.e.\ but not co-r.e.\ (undecidable).
+  \item \(L_3\): decidable (simulate up to \(k\) steps), hence both r.e.\ and co-r.e.
+\end{itemize}
 
-To show \(L_d\) is not even recursively enumerable, assume for contradiction that some machine \(M\) accepts exactly \(L_d\). Let \(w_k\) be a code for \(M\) itself. Then \(M\) accepts \(w_k\) if and only if \(w_k\notin L(M_k)\), but since \(M=M_k\), this says “\(w_k\in L(M_k)\) if and only if \(w_k\notin L(M_k)\),” a contradiction. Hence no Turing machine can enumerate or accept \(L_d\), proving it is not RE.
+\subsubsection*{Exercise 2: Closure Properties}
 
-\subsubsection*{9.2 An Undecidable Problem That Is RE}
-The class of recursively enumerable (RE) languages consists of those accepted by some Turing machine (TM), but some of these machines may never halt on inputs not in the language. We refine RE languages into two subclasses: recursive (decidable) languages, for which a TM always halts and decides membership, and the remainder of RE, where a machine halts only on strings in the language. Recursive languages are closed under complement, so if an RE language’s complement fails to be RE, the language cannot be recursive. Our next focus is the universal language  
-\[
-L_u = \{\langle M,w\rangle \mid M \text{ accepts } w\},
-\]
-which is RE because a universal TM can simulate \(M\) on \(w\) and halt if \(M\) does.
-
-Although \(L_u\) is RE, it is not recursive. If it were, then its complement would also be RE, and one could reduce the non-RE diagonalization language \(L_d\) to it, contradicting the non-enumerability of \(L_d\). Thus \(L_u\) exemplifies a natural decision problem that is semi-decidable but inherently undecidable.
-
-\subsection{Homework}
-
-\subsubsection*{Exercise A}
-\subparagraph*{Problem summary:}  
-Construct three Turing machines over the alphabet \(\{0,1\}\):
+Decide which hold in general:
 \begin{enumerate}
-  \item \(M_1\) accepts the language \(\{1\,0^n \mid n\ge0\}\) and on input \(1\,0^n\) outputs \(1\,0^{n+1}\).
-  \item \(M_2\) accepts \(\{1\,0^n \mid n\ge0\}\) and on input \(1\,0^n\) outputs the single symbol \(1\).
-  \item \(M_3\) accepts all binary strings and on any input replaces each \(0\) by \(1\) and each \(1\) by \(0\).
+  \item If \(L_1,L_2\) are decidable then \(L_1\cup L_2\) is decidable.
+  \item If \(L\) is decidable then \(\overline L\) is decidable.
+  \item If \(L\) is decidable then \(L^*\) is decidable.
+  \item If \(L_1,L_2\) are r.e.\ then \(L_1\cup L_2\) is r.e.
+  \item If \(L\) is r.e.\ then \(\overline L\) is r.e.
+  \item If \(L\) is r.e.\ then \(L^*\) is r.e.
+\end{enumerate}
+\textbf{Answer.}
+\begin{enumerate}
+  \item True.
+  \item True.
+  \item True.
+  \item True.
+  \item False (complement of halting).
+  \item True.
 \end{enumerate}
 
-\subparagraph*{Answer:}
-\begin{description}
-  \item[\(M_1\)]  
-  \(M_1=(\{q_0,q_1,q_2,q_a\},\{0,1\},\{0,1,B\},\delta_1,q_0,B,\{q_a\})\) with
-  \[
-    \begin{aligned}
-      \delta_1(q_0,1)&=(q_1,1,R),\\
-      \delta_1(q_1,0)&=(q_1,0,R),\\
-      \delta_1(q_1,B)&=(q_2,0,L),\\
-      \delta_1(q_2,0)&=(q_2,0,L),\\
-      \delta_1(q_2,1)&=(q_a,1,R).
-    \end{aligned}
-  \]
-  \item[\(M_2\)]  
-  \(M_2=(\{q_0,q_1,q_2,q_3,q_a\},\{0,1\},\{0,1,B\},\delta_2,q_0,B,\{q_a\})\) with
-  \[
-    \begin{aligned}
-      \delta_2(q_0,1)&=(q_1,1,R),\\
-      \delta_2(q_1,0)&=(q_1,0,R),\\
-      \delta_2(q_1,B)&=(q_2,B,L),\\
-      \delta_2(q_2,0)&=(q_2,B,L),\\
-      \delta_2(q_2,1)&=(q_3,1,R),\\
-      \delta_2(q_3,0)&=(q_3,B,R),\quad
-      \delta_2(q_3,1)=(q_3,B,R),\\
-      \delta_2(q_3,B)&=(q_a,B,R).
-    \end{aligned}
-  \]
-  \item[\(M_3\)]  
-  \(M_3=(\{q_0,q_a\},\{0,1\},\{0,1,B\},\delta_3,q_0,B,\{q_a\})\) with
-  \[
-    \delta_3(q_0,0)=(q_0,1,R),\quad
-    \delta_3(q_0,1)=(q_0,0,R),\quad
-    \delta_3(q_0,B)=(q_a,B,R).
-  \]
-\end{description}
+\subsection*{Conclusion}
 
-\subsubsection*{Exercise 1}
-\subparagraph*{Problem summary:}  
-Classify each of the following languages over the encoding of Turing machines (and inputs) as decidable, recursively enumerable (r.e.), or co-r.e.\ (has an r.e.\ complement):
-\[
-  \begin{aligned}
-    L_1 &= \{\,M \mid M\text{ halts on its own description}\},\\
-    L_2 &= \{(M,w)\mid M\text{ halts on input }w\},\\
-    L_3 &= \{(M,w,k)\mid M\text{ halts on }w\text{ within }k\text{ steps}\}.
-  \end{aligned}
-\]
+We have provided complete Turing‐machine configurations for the simulator, classified key halting‐related languages, and reviewed closure properties of decidable and r.e.\ classes.  These results illustrate the power and limits of Turing machines and set the stage for complexity‐theoretic questions in subsequent weeks.
 
-\subparagraph*{Answer:}
-\begin{enumerate}
-  \item \(L_1\) is r.e.\ but not co-r.e., and therefore undecidable.
-  \item \(L_2\) is r.e.\ but not co-r.e., and therefore undecidable.
-  \item \(L_3\) is decidable (by simulating \(M\) on \(w\) for \(k\) steps), hence r.e.\ and co-r.e.
-\end{enumerate}
+\newpage
 
-\subsubsection*{Exercise 2}
-\subparagraph*{Problem summary:}  
-Decide for each of the following whether it holds in general.  If yes, give a brief proof; if no, give a counterexample.
-\begin{enumerate}
-  \item If \(L_1\) and \(L_2\) are decidable, then \(L_1\cup L_2\) is decidable.
-  \item If \(L\) is decidable, then its complement \(\overline L\) is decidable.
-  \item If \(L\) is decidable, then \(L^*\) is decidable.
-  \item If \(L_1\) and \(L_2\) are r.e., then \(L_1\cup L_2\) is r.e.
-  \item If \(L\) is r.e., then \(\overline L\) is r.e.
-  \item If \(L\) is r.e., then \(L^*\) is r.e.
-\end{enumerate}
-
-\subparagraph*{Answer:}
-\begin{enumerate}
-  \item[\(1.\)] \textbf{True.} Given deciders for \(L_1\) and \(L_2\), on input \(w\) run the first; if it accepts, accept; otherwise run the second and accept or reject accordingly.
-  \item[\(2.\)] \textbf{True.} If \(M\) decides \(L\), build a decider for \(\overline L\) that runs \(M\) and flips its answer.
-  \item[\(3.\)] \textbf{True.} To decide \(w\in L^*\), use dynamic programming over all splits of \(w\).
-  \item[\(4.\)] \textbf{True.} If \(M_1\) and \(M_2\) semi-decide \(L_1\) and \(L_2\), dovetail their simulations on input \(w\); accept when either halts accepting.
-  \item[\(5.\)] \textbf{False.} Counterexample: the halting problem \(L_u\) is r.e.\ but its complement is not.
-  \item[\(6.\)] \textbf{True.} r.e.\ languages are closed under concatenation and union, so \(L^*\) is r.e.
-\end{enumerate}
-
-\subsection{Conclusion}
-Having explored the fundamental limits of algorithmic computation, the readings introduced a concrete demonstration of an undecidable problem via the “hello–world” detection within C programs, showing how self-referential constructions lead to no effective testing procedure. Section 8.2 formalized computation with the Turing machine model, enabling precise proofs of undecidability and delineating decidable, recursively enumerable, and non-enumerable languages. In Section 9.1 we defined the diagonalization language \(L_{d}\) and proved it is not even recursively enumerable. Section 9.2 contrasted \(L_{d}\) with the universal language \(L_{u}\), illustrating the distinction between semi-decidable and decidable problems and leveraging closure properties of recursive languages under complement.
-
-Through exercises we applied these concepts concretely: constructing Turing machines for simple language transformations; classifying halting-related languages as r.e., decidable, or co-r.e.; and investigating closure properties of decidable and r.e.\ classes under union, complement, and Kleene star. These tasks reinforced the interplay between formal definitions, encoding techniques, and simulated execution in establishing decidability and complexity boundaries.
-
-\section{Complexity Theory, Growth Comparisons, and Sorting Runtimes}
+\section{Week 8 \& 9: Complexity Theory, Growth Comparisons, and Sorting Runtimes}
 
 \subsection{Introduction}
 We begin with an overview of intractable computational problems from Chapter 10 of Hopcroft, Motwani, and Ullman, introducing the complexity classes P and NP and the notion of NP-completeness. Then we work through exercises on ordering and relating functions by asymptotic growth and finish with classic sorting-algorithm comparisons. Along the way we include a couple of illustrative plots to make the abstract inclusions concrete.
 
 \subsection{Readings}
+\subsubsection*{Chapter 10.1: The Classes P and NP}
+Chapter 10.1 refocuses from mere decidability to \emph{tractability}: among the decidable problems, which can actually be solved in a reasonable amount of time? It formalizes the class P as those languages decidable by a deterministic Turing machine in time polynomial in the input length, and NP as those decidable by a nondeterministic machine whose every branch halts in polynomial time. The chapter motivates polynomial time as the practical threshold—algorithms superpolynomial in nature blow up too quickly to handle large inputs—and introduces polynomial-time reductions, which transform instances of one problem into another in polynomial time, preserving membership. These reductions provide a rigorous way to compare problem hardness: if A reduces to B and B is in P, then A is also in P. Finally, the chapter highlights problems whose best-known solutions are exponential, hinting at the P versus NP question at the heart of complexity theory.
 
-\subsubsection{Chapter 10.1: The Classes P and NP}
-Chapter 10.1 refocuses from mere decidability to \emph{tractability}: among the decidable problems, which can actually be solved in a reasonable amount of time?  It formalizes the class P as those languages decidable by a deterministic Turing machine in time polynomial in the input length, and NP as those decidable by a nondeterministic machine whose every branch halts in polynomial time.  The chapter motivates polynomial time as the practical threshold—algorithms superpolynomial in nature blow up too quickly to handle large inputs—and introduces polynomial-time reductions, which transform instances of one problem into another in polynomial time, preserving membership.  These reductions provide a rigorous way to compare problem hardness: if A reduces to B and B is in P, then A is also in P.  Finally, the chapter highlights problems whose best-known solutions are exponential, hinting at the P versus NP question at the heart of complexity theory.
+\subsubsection*{Chapter 10.2: SAT and Cook’s Theorem}
+Chapter 10.2 presents the Boolean Satisfiability Problem (SAT): given a propositional formula built from variables, negation, conjunction, and disjunction, does there exist an assignment of true/false values that makes it true? After fixing a finite‐alphabet encoding, it shows SAT lies in NP by having a nondeterministic machine guess an assignment and then evaluate the formula in polynomial time. The centerpiece is Cook’s Theorem, which constructs, in polynomial time, a Boolean formula whose structure enforces that an NP machine’s accepting computation on input \(x\) exists if and only if the formula is satisfiable. By encoding the entire computation tableau into variables and clauses that ensure correct transitions and an accepting state, the proof establishes that every NP problem reduces to SAT. Thus SAT is NP-complete: it sits in NP and is as hard as any NP problem.
 
-\subsubsection{Chapter 10.2: SAT and Cook’s Theorem}
-Chapter 10.2 presents the Boolean Satisfiability Problem (SAT): given a propositional formula built from variables, negation, conjunction, and disjunction, does there exist an assignment of true/false values that makes it true?  After fixing a finite‐alphabet encoding, it shows SAT lies in NP by having a nondeterministic machine guess an assignment and then evaluate the formula in polynomial time.  The centerpiece is Cook’s Theorem, which constructs, in polynomial time, a Boolean formula whose structure enforces that an NP machine’s accepting computation on input $x$ exists if and only if the formula is satisfiable.  By encoding the entire computation tableau into variables and clauses that ensure correct transitions and an accepting state, the proof establishes that every NP problem reduces to SAT.  Thus SAT is NP-complete: it sits in NP and is as hard as any NP problem.
-
-\subsubsection{Chapter 10.3: CNF, CSAT, and 3SAT}
-Chapter 10.3 refines SAT by restricting formula shape to \emph{conjunctive normal form} (CNF)—an AND of clauses, each a disjunction of literals—and to $k$-CNF where each clause has exactly $k$ literals.  Converting arbitrary formulas to equivalent CNF can blow up exponentially, so the chapter gives an \emph{equisatisfiable} transformation: push negations downward via De Morgan’s laws so they only apply to variables, then introduce fresh variables to break complex subformulas into small clauses without replicating subexpressions.  This yields a polynomial-time reduction from general SAT to CSAT (CNF-SAT), proving CSAT NP-complete.  Finally, it shows how to transform any CNF into an equisatisfiable 3-CNF formula in linear time by splitting long clauses with auxiliary variables.  Hence even 3SAT remains NP-complete, cementing its role as the canonical hard problem in complexity theory.
+\subsubsection*{Chapter 10.3: CNF, CSAT, and 3SAT}
+Chapter 10.3 refines SAT by restricting formula shape to \emph{conjunctive normal form} (CNF)—an AND of clauses, each a disjunction of literals—and to \(k\)-CNF where each clause has exactly \(k\) literals. Converting arbitrary formulas to equivalent CNF can blow up exponentially, so the chapter gives an \emph{equisatisfiable} transformation: push negations downward via De Morgan’s laws so they only apply to variables, then introduce fresh variables to break complex subformulas into small clauses without replicating subexpressions. This yields a polynomial-time reduction from general SAT to CSAT (CNF-SAT), proving CSAT NP-complete. Finally, it shows how to transform any CNF into an equisatisfiable 3-CNF formula in linear time by splitting long clauses with auxiliary variables. Hence even 3SAT remains NP-complete, cementing its role as the canonical hard problem in complexity theory.
 
 \subsection{Homework}
-
-\subsubsection{Exercise 1}
-Order by growth (slow → fast):
+\subsubsection*{Exercise 1}
+Order by growth (slow \(\to\) fast):
 \[
 2^{2^n},\quad e^{\log n},\quad \log n,\quad e^n,\quad
 e^{2\log n},\quad \log(\log n),\quad 2^n,\quad n!.
@@ -1164,19 +1102,18 @@ e^{2\log n},\quad \log(\log n),\quad 2^n,\quad n!.
     xlabel={$n$}, ylabel={$f(n)$}, ymode=log,
     grid=major, legend pos=north west
   ]
-  \addplot [domain=2:6, samples=5, mark=none] {ln(ln(x))};
-  \addlegendentry{$\ln\ln n$}
-  
-  \addplot [domain=1:6, samples=6, mark=none] {ln(x)};
-  \addlegendentry{$\ln n$}
-  
-    \addplot coordinates {(1,1) (2,2) (3,3) (4,4) (5,5) (6,6)};
+    \addplot[blue,mark=none] coordinates {(2,-0.3665) (3,0.0940) (4,0.3254) (5,0.4764) (6,0.5832)};
+      \addlegendentry{$\ln\ln n$}
+    \addplot[red,mark=none] coordinates {(1,0.0000) (2,0.6931) (3,1.0986) (4,1.3863) (5,1.6094) (6,1.7918)};
+      \addlegendentry{$\ln n$}
+    \addplot[green,mark=none] coordinates {(1,1) (2,2) (3,3) (4,4) (5,5) (6,6)};
       \addlegendentry{$n$}
   \end{axis}
 \end{tikzpicture}
 \end{center}
 
-\subsubsection{Exercise 2}
+
+\subsubsection*{Exercise 2}
 For \(f,g,h\colon\mathbb N\to\mathbb R_{\ge0}\), prove:
 \[
 \begin{aligned}
@@ -1187,18 +1124,17 @@ For \(f,g,h\colon\mathbb N\to\mathbb R_{\ge0}\), prove:
 5.\;&h(n)>0\;\forall n,\;O(f)\subseteq O(g)\implies O(f\,h)\subseteq O(g\,h).
 \end{aligned}
 \]
-
 \textbf{Proof.}
 \begin{enumerate}[label=\arabic*.]
-  \item Since \(f(n)\le1\cdot f(n)\), we have \(f\in O(f)\).
-  \item If \(u\in O(c\,f)\), then \(u(n)\le C\,(c\,f(n))\), so \(u\in O(f)\); conversely similarly.
-  \item If for large \(n\), \(f(n)\le g(n)\) and \(u\in O(f)\), then \(u(n)\le C\,f(n)\le C\,g(n)\).
-  \item If \(u\in O(f)\), then \(u(n)+h(n)\le C\,f(n)+h(n)\le C(f(n)+h(n))\).
-  \item If \(u\in O(f)\) and \(h(n)>0\), then \(u(n)h(n)\le C\,f(n)\,h(n)\).
+  \item \(f(n)\le1\cdot f(n)\), so \(f\in O(f)\).
+  \item If \(u\in O(c\,f)\), then \(u(n)\le C\,c\,f(n)\), hence \(u\in O(f)\).  Conversely similarly.
+  \item If \(f(n)\le g(n)\) for large \(n\) and \(u\in O(f)\), then \(u(n)\le C\,f(n)\le C\,g(n)\), so \(u\in O(g)\).
+  \item If \(u\in O(f)\), then \(u(n)+h(n)\le C\,f(n)+h(n)\le C\bigl(f(n)+h(n)\bigr)\), giving \(u+h\in O(f+h)\subseteq O(g+h)\).
+  \item If \(u\in O(f)\) and \(h(n)>0\), then \(u(n)\,h(n)\le C\,f(n)\,h(n)\), so \(u\,h\in O(f\,h)\subseteq O(g\,h)\).
 \end{enumerate}
 
-\subsubsection{Exercise 3}
-Let \(i,j,k,n\in\mathbb N\).  Prove:
+\subsubsection*{Exercise 3}
+Let \(i,j,k,n\in\mathbb N\). Prove:
 \[
 \begin{aligned}
 1.\;&j\le k\implies O(n^j)\subseteq O(n^k),\\
@@ -1209,16 +1145,18 @@ Let \(i,j,k,n\in\mathbb N\).  Prove:
 \end{aligned}
 \]
 
+\newpage
+
 \textbf{Proof.}
 \begin{enumerate}[label=\arabic*.]
-  \item If \(j\le k\), then \(n^j\le n^k\) for \(n\ge1\).
-  \item For \(n\ge1\), \(n^j+n^k\le2n^k\).
-  \item \(\sum_{m=0}^k a_m\,n^m\le(\sum|a_m|)\,n^k\).
+  \item \(n^j\le n^k\) for \(n\ge1\), so \(O(n^j)\subseteq O(n^k)\).
+  \item For \(n\ge1\), \(n^j+n^k\le2n^k\), giving \(O(n^j+n^k)\subseteq O(n^k)\).
+  \item \(\sum_{m=0}^k a_m n^m\le \bigl(\sum|a_m|\bigr)n^k\).
   \item For \(n\ge2\), \(\log n\le n\).
   \item For \(n\ge2\), \(n\log n\le n^2\).
 \end{enumerate}
 
-\subsubsection{Exercise 4}
+\subsubsection*{Exercise 4}
 Which relationships hold between:
 \[
 \begin{aligned}
@@ -1231,14 +1169,14 @@ Which relationships hold between:
 \]
 \textbf{Answer.}
 \begin{enumerate}[label=\arabic*.]
-  \item \(\sqrt n\le n\implies O(\sqrt n)\subsetneq O(n)\).
-  \item \(n^2=o(2^n)\implies O(n^2)\subsetneq O(2^n)\).
-  \item Eventually \((\log n)^2\ge\log n\implies O(\log n)\subseteq O((\log n)^2)\).
-  \item \(2^n\le3^n\implies O(2^n)\subsetneq O(3^n)\).
-  \item \(\log_2n=\tfrac{\log_3n}{\log_32}\implies O(\log_2n)=O(\log_3n)\).
+  \item \(O(\sqrt n)\subsetneq O(n)\).
+  \item \(O(n^2)\subsetneq O(2^n)\).
+  \item \(O(\log n)\subseteq O((\log n)^2)\).
+  \item \(O(2^n)\subsetneq O(3^n)\).
+  \item \(O(\log_2n)=O(\log_3n)\).
 \end{enumerate}
 
-\subsubsection{Exercise 5}
+\subsubsection*{Exercise 5}
 Classic sorting comparisons:
 \[
 \text{bubble sort vs.\ insertion sort},\quad
@@ -1248,8 +1186,8 @@ Classic sorting comparisons:
 \textbf{Discussion.}
 \begin{itemize}
   \item \textbf{Bubble vs.\ Insertion:} Both worst-case \(O(n^2)\), but insertion sort is \(O(n)\) on nearly-sorted input.
-  \item \textbf{Insertion vs.\ Merge:} Insertion sort worst-case \(O(n^2)\), merge sort always \(O(n\log n)\), so merge scales better.
-  \item \textbf{Merge vs.\ Quick:} Merge sort is \(O(n\log n)\) always; quick sort is \(O(n\log n)\) average, \(O(n^2)\) worst, but faster in practice due to lower constants and in-place partitioning.
+  \item \textbf{Insertion vs.\ Merge:} Insertion sort worst-case \(O(n^2)\), merge sort always \(O(n\log n)\).
+  \item \textbf{Merge vs.\ Quick:} Merge sort is \(O(n\log n)\) always; quick sort is \(O(n\log n)\) average, \(O(n^2)\) worst, but often faster in practice.
 \end{itemize}
 
 \subsection{Conclusion}
@@ -1257,9 +1195,153 @@ We’ve surveyed P vs.\ NP, NP-completeness via SAT, practiced ordering and rela
 
 \textbf{Question:} What’s the fastest known quantum sorting algorithm in the query (comparison) model, and how close is it to being practical?
 
+\section{Weeks 10 \& 11: Intractable Problems}
 
-\begin{thebibliography}{9}
-\bibitem{hopcroft} Hopcroft, J. E., Motwani, R., Ullman, J. D. \textit{Introduction to Automata Theory, Languages, and Computation}. Pearson, 2007.
+\subsection{Chapter 10.1: The Classes \(\mathrm{P}\) and \(\mathrm{NP}\)}  
+We refine decidability to \emph{tractability}.  A language \(L\) is in
+\(\mathrm{P}\) if some deterministic TM decides it in time \(O(n^k)\).  A
+language \(L\) is in \(\mathrm{NP}\) if some nondeterministic TM accepts
+it in time \(O(n^k)\).  We introduce \emph{polynomial–time reductions}—
+transformations computable in polynomial time—and define \emph{NP‐completeness}:
+
+\begin{definition}
+A language \(L\) is \emph{NP‐complete} if
+\begin{enumerate}
+  \item \(L\in\mathrm{NP}\), and
+  \item for every \(L'\in\mathrm{NP}\), there is a polynomial‐time reduction
+    \(L'\le_p L\).
+\end{enumerate}
+\end{definition}
+
+\subsection{Chapter 10.2: SAT and NP‐Completeness}\label{sec:chapter10.2}
+\paragraph{The SAT Problem.}  Boolean formulas are built from variables,
+\(\land,\lor,\lnot\), and parentheses.  A formula is \emph{satisfiable} if
+some assignment of \(\{\mathrm{TRUE},\mathrm{FALSE}\}\) makes it true.
+The language
+\[
+  \mathrm{SAT}
+  \;=\;
+  \bigl\{\varphi\mid \varphi\text{ a satisfiable Boolean formula}\bigr\}
+\]
+is in \(\mathrm{NP}\) (guess an assignment, evaluate in polynomial time).
+\paragraph{Cook’s Theorem.}  Every \(L\in\mathrm{NP}\) reduces to SAT in
+polynomial time; hence SAT is NP‐complete.
+
+\subsection{Exercises}\label{sec:week8-9-exercises}
+
+\subsubsection{Exercise 1: Rewriting in CNF}  
+Rewrite each formula into an equivalent conjunctive normal form.
+
+\[
+\varphi_1 := \neg\bigl((a\land b)\;\lor\;(\neg c\land d)\bigr),
+\quad
+\varphi_2 := \neg\bigl((p\lor q)\to(r\land\neg s)\bigr).
+\]
+
+\paragraph{Solution.}
+\[
+\begin{aligned}
+\varphi_1 
+&= \neg\bigl(X\lor Y\bigr)
+  &&\text{where }X=(a\land b),\;Y=(\neg c\land d)\\
+&= \neg X\;\land\;\neg Y\\
+&= (\neg a\;\lor\;\neg b)\;\land\;(c\;\lor\;\neg d).
+\\[6pt]
+\varphi_2 
+&= \neg\Bigl(\neg(p\lor q)\;\lor\;(r\land\neg s)\Bigr)
+  &&\bigl(P\to Q\equiv\neg P\lor Q\bigr)\\
+&= \neg\bigl(\neg X\;\lor\;Y\bigr)
+  &&\text{where }X=(p\lor q),\;Y=(r\land\neg s)\\
+&= X\;\land\;\neg Y\\
+&= (p\lor q)\;\land\;(\neg r\lor s).
+\end{aligned}
+\]
+
+\subsubsection{Exercise 2: Satisfiability}  
+For each formula, decide whether it is satisfiable.  If yes, give a satisfying
+assignment; if not, prove no such assignment exists.
+
+\[
+\begin{aligned}
+\psi_1 &:= (a\lor\neg b)\;\land\;(\neg a\lor b)\;\land\;(\neg a\lor\neg b),\\
+\psi_2 &:= (\neg p\lor q)\;\land\;(\neg q\lor r)\;\land\;\neg(\neg p\lor r),\\
+\psi_3 &:= (x\lor y)\;\land\;(\neg x\lor y)\;\land\;(x\lor\neg y)\;\land\;(\neg x\lor\neg y).
+\end{aligned}
+\]
+
+\paragraph{Solution.}
+\begin{itemize}
+  \item \(\psi_1\): take \(a=\mathrm{FALSE},\,b=\mathrm{FALSE}\).  Then
+  \[
+    (0\lor1)\land(1\lor0)\land(1\lor1)
+    =1\land1\land1=1.
+  \]
+  Hence \(\psi_1\) is satisfiable.
+
+  \item \(\psi_2\): note
+  \[
+    \neg(\neg p\lor r)\equiv(p\land\neg r).
+  \]
+  So \(\psi_2\equiv(\neg p\lor q)\land(\neg q\lor r)\land p\land\neg r\).
+  From \(p\) and \(\neg r\) we get \(q\) by the first clause, but then
+  \(\neg q\lor r\) becomes \(0\), contradiction.  Thus \(\psi_2\) is
+  unsatisfiable.
+
+  \item \(\psi_3\): one checks all four assignments to \((x,y)\) and finds
+  each violates some clause.  Hence \(\psi_3\) is unsatisfiable.
+\end{itemize}
+
+\subsubsection{Exercise 3: Sudoku CNF Encoding}  
+We have boolean variables
+\[
+  x_{r,c,v},\quad
+  r,c,v\in\{1,\dots,9\},
+\]
+true exactly when cell \((r,c)\) holds value \(v\).  The CNF is
+\(\bigwedge_{k=1}^6 C_k\), where:
+
+\[
+\begin{aligned}
+C_1{:}&\quad
+\bigwedge_{r=1}^9\;\bigwedge_{c=1}^9\;\bigl(\,x_{r,c,1}\lor x_{r,c,2}\lor\cdots\lor x_{r,c,9}\bigr),
+&&\text{(each cell has at least one value)}\\
+C_2{:}&\quad
+\bigwedge_{r=1}^9\;\bigwedge_{c=1}^9\;\bigwedge_{\substack{v,w=1\\v\neq w}}^9
+\neg\bigl(x_{r,c,v}\land x_{r,c,w}\bigr),
+&&\text{(each cell has at most one value)}\\
+C_3{:}&\quad
+\bigwedge_{r=1}^9\;\bigwedge_{v=1}^9\;\bigl(\,x_{r,1,v}\lor\cdots\lor x_{r,9,v}\bigr),
+&&\text{(each row contains each value)}\\
+C_4{:}&\quad
+\bigwedge_{c=1}^9\;\bigwedge_{v=1}^9\;\bigl(\,x_{1,c,v}\lor\cdots\lor x_{9,c,v}\bigr),
+&&\text{(each column contains each value)}\\
+C_5{:}&\quad
+\bigwedge_{b_r=0}^2\;\bigwedge_{b_c=0}^2\;\bigwedge_{v=1}^9
+\;\bigl(x_{3b_r+1,\,3b_c+1,\,v}\;\lor\;\cdots\;\lor\;x_{3b_r+3,\,3b_c+3,\,v}\bigr),
+&&\text{(each \(3\times3\) block has each value)}\\
+C_6{:}&\quad
+\bigwedge_{(r,c)\in\mathrm{Clues}}x_{r,c,v_{r,c}},
+&&\text{(respect the given clues).}
+\end{aligned}
+\]
+
+\subsection{Interesting Question}
+Is there a practical sub-exponential algorithm for SAT on random formulas,
+and how does it relate to the worst-case NP-completeness barrier?
+
+\subsection{Conclusion}
+Weeks 8 \& 9 introduced the classes \(\mathrm{P}\) and \(\mathrm{NP}\), the
+notion of polynomial–time reduction, and NP‐completeness.  Cook’s Theorem
+places SAT at the heart of intractability.  We practiced CNF rewriting,
+satisfiability proofs, and large‐scale CNF encodings (Sudoku), reinforcing
+both the theoretical limits and the practical modeling power of SAT.
+
+\section{Bibliography}
+\begin{thebibliography}{99}
+\bibitem[HMU]{HMU}
+J.~E.~Hopcroft, R.~Motwani, J.~D.~Ullman:
+\emph{Introduction to Automata Theory, Languages, and Computation (3rd Edition)},
+\href{https://archive.org/details/hopcroft-motwani-ullman-introduction-to-automata-theory-languages-and-computations-3rd-edition/page/65/mode/1up?view=theater}{Archive.org Link}.
 \end{thebibliography}
 
 \end{document}
