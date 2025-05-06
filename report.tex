@@ -92,9 +92,9 @@ defining and recognizing regular languages.
 \subsection{Introduction}
 Automata are abstract machines that model computations without memory. Before defining them formally, we consider some examples.
 
-\subsection{Examples of Automata}
+\subsection{Readings}
 
-\subsubsection{Parking or Vending Machine}
+\subsubsection*{Parking or Vending Machine}
 \textbf{Specification:} The machine requires 25 cents, paid in chunks of 5 or 10 cents.
 
 \textbf{Automaton:} The state 25 is the accepting or final state. A word (i.e., a sequence of symbols 5 and 10) is accepted if it leads from the initial state (0) to the final state (25).
@@ -121,7 +121,7 @@ Automata are abstract machines that model computations without memory. Before de
 \end{tikzpicture}
 \end{center}
 
-\subsubsection{Variable Names}
+\subsubsection*{Variable Names}
 
 \textbf{Specification:} In defining a programming language, valid variable names should:
 \begin{itemize}
@@ -137,7 +137,7 @@ Automata are abstract machines that model computations without memory. Before de
 
 \newpage
 
-\subsubsection{Turnstile}
+\subsubsection*{Turnstile}
 
 \textbf{Specification:} A money-operated turnstile:
 \begin{itemize}
@@ -170,7 +170,7 @@ Automata are abstract machines that model computations without memory. Before de
 
 \subsection{Homework}
 
-\subsubsection{Exercise: Characterizing Accepted Words}
+\subsubsection*{Exercise: Characterizing Accepted Words}
 
 Characterize all accepted words (i.e., describe exactly those words that are recognized).
 
@@ -182,7 +182,7 @@ The vending machine automaton accepts words consisting of payments in increments
 
 subject to the constraint that the sum of the numbers in the sequence equals 25.
 
-\subsubsection{Exercise: Turnstile Regular Expression}
+\subsubsection*{Exercise: Turnstile Regular Expression}
 
 Characterize all accepted words and describe them using a regular expression.
 
@@ -200,7 +200,7 @@ where:
     \item The entire sequence can repeat any number of times.
 \end{itemize}
 
-\subsubsection{Example Accepted Words}
+\subsubsection*{Example Accepted Words}
 \begin{align*}
     & p &\quad \text{(Pay once, unlocks, and stays open)} \\
     & p p &\quad \text{(Pay twice, remains unlocked)} \\
@@ -209,7 +209,7 @@ where:
     & u p u p u p &\quad \text{(Invalid pushes in locked state, followed by pays to unlock)}
 \end{align*}
 
-\subsubsection{Exercise: Word Classification in Languages}
+\subsubsection*{Exercise: Word Classification in Languages}
 
 Determine for the following words if they are contained in \(L_1\), \(L_2\), or \(L_3\).
 
@@ -242,7 +242,7 @@ The words under consideration are:
     \item \(w_5 = 11110000\): Does not contain the substring ``01'' (the transition from 1s to 0s gives ``10'' rather than ``01''); its length is 8 (a power of two); and it has 4 ones and 4 zeros.
 \end{itemize}
 
-\subsubsection{Exercise: DFA Run Acceptance}
+\subsubsection*{Exercise: DFA Run Acceptance}
 
 Consider the DFA from above (see \href{https://hackmd.io/_uploads/ByLSmw_tyl.jpg}{dfa\_example}). Consider the paths corresponding to the words \(w_1 = 0010\), \(w_2 = 1101\), and \(w_3 = 1100\). For which of these words does their run end in the accepting state?
 
@@ -263,7 +263,7 @@ the language \textit{accepted} by \(\mathcal{A}\).
 
 One plausible interpretation (consistent with common examples such as a DFA for determining divisibility by 3 or for ensuring an even number of 1s) shows that only \(w_3\) meets the acceptance condition, while \(w_1\) and \(w_2\) do not.
 
-\subsection{Summary of Week 1}
+\subsection*{Summary of Week 1}
 
 Finite automata are abstract machines used to recognize regular languages, which can be fully described using finite-state transitions. This chapter explores deterministic finite automata (DFAs) and nondeterministic finite automata (NFAs), demonstrating that NFAs, despite their flexibility, recognize the same class of languages as DFAs.
 
@@ -288,7 +288,14 @@ DFAs determine if a word belongs to a language by processing transitions. If the
 \subsection{Introduction}
 In this homework, we explore the implementation of deterministic finite automata (DFAs) in Python. We will go beyond the simple graphical representation of DFAs and build them using Python types.
 
-\subsection{Implementing DFAs in Python}
+\subsection{Readings}
+\subsubsection*{Chapter 2.2.4}
+A \textbf{Deterministic Finite Automaton (DFA)} is a formal model of computation that processes input sequences while maintaining a single, well-defined state at any given time. The term "deterministic" means that for each input symbol, the automaton transitions to exactly one state.
+
+
+\subsection{Homework}
+
+\subsubsection*{Implementing DFAs in Python}
 We will implement the following DFAs in Python using this \texttt{DFA} class:
 
 \begin{verbatim}
@@ -319,7 +326,7 @@ class DFA:
         return current_state in self.F  # Accept if final state is in F
 \end{verbatim}
 
-\subsubsection{Exercise 1: Word Processing with DFAs}
+\subsubsection*{Exercise 1: Word Processing with DFAs}
 \begin{center}
 \begin{tikzpicture}[shorten >=1pt, node distance=2cm, on grid, auto] 
    \node[state, initial] (q_1) {1}; 
@@ -380,7 +387,7 @@ Here is how we initialize the DFAs in Python:
     A2 = dfa.DFA(Q, Sigma, delta, q0, F)
 \end{verbatim}
 
-\subsection{Constructing the Complement DFA}
+\subsubsection*{Constructing the Complement DFA}
 To construct an automaton \(A_0\) that accepts exactly the words that \(A\) refuses and vice versa we can simply swap the accepting states with the previously non-accepting states.
 
 \begin{center}
@@ -414,9 +421,6 @@ def refuse(A):
 
     return dfa.DFA(Q0, Sigma0, delta0, q0_0, F0)
 \end{verbatim}
-
-\subsubsection*{Summary of Chapter 2.2.4}
-A \textbf{Deterministic Finite Automaton (DFA)} is a formal model of computation that processes input sequences while maintaining a single, well-defined state at any given time. The term "deterministic" means that for each input symbol, the automaton transitions to exactly one state.
 
 \subsubsection*{Exercise 2.4.4}
 \textbf{(a) DFA for strings ending in 00}
@@ -477,6 +481,8 @@ A \textbf{Deterministic Finite Automaton (DFA)} is a formal model of computation
 \end{tikzpicture}
 \end{center}
 
+\newpage
+
 \subsection{Conclusion}
 A \textbf{Deterministic Finite Automaton (DFA)} is a theoretical computational model used to recognize formal languages. A DFA consists of a finite set of states \( Q \), an input alphabet \( \Sigma \), a transition function \( \delta: Q \times \Sigma \to Q \), a start state \( q_0 \), and a set of accepting states \( F \). The machine processes strings sequentially, transitioning between states according to \( \delta \). If, after consuming the entire string, the DFA ends in an accepting state, the input is accepted; otherwise, it is rejected.
 
@@ -488,9 +494,9 @@ A \textbf{Deterministic Finite Automaton (DFA)} is a theoretical computational m
 This week we covered ways to combine automata. We focused on the set theory used in the combination as well as some notation.  
 Lastly, we introduced Nondeterministic Finite Automatas, or NFAs.
 
-\subsection{Exercises}
+\subsection{Homework}
 
-\subsubsection{Extended Transition Functions}
+\subsubsection*{Extended Transition Functions}
 \textbf{Brief summary of the question:}
 Given the two DFAs below:
 \begin{itemize}
@@ -548,7 +554,7 @@ Given the two DFAs below:
   \hat{\delta}^{(2)}(1,\,abba)=3.
 \]
 
-\subsubsection{Intersection Automaton for \(A^{(1)}\) and \(A^{(2)}\)}
+\subsubsection*{Intersection Automaton for \(A^{(1)}\) and \(A^{(2)}\)}
 We form the product automaton
 \[
   A = (Q^{(1)}\times Q^{(2)},\,\Sigma,\,\delta,\,(q_0^{(1)},q_0^{(2)}),\,F^{(1)}\times F^{(2)}),
@@ -603,14 +609,16 @@ Use the same transitions but set
 \]
 so \(L(A')=L(A^{(1)})\cup L(A^{(2)})\).
 
-\subsection{Exercise 2.2.7}
+\subsection*{Exercise 2.2.7}
 \textbf{Claim.} If \(\delta(q,a)=q\) for all \(a\), then \(\delta(q,w)=q\) for any \(w\).
 
 \textbf{Proof (by induction):}
 Base: \(\delta(q,\varepsilon)=q\).  
 Step: \(\delta(q,xa)=\delta(\delta(q,x),a)=\delta(q,a)=q\).
 
-\subsection{Chapter 2.3}
+\subsection{Readings}
+
+\subsubsection*{Chapter 2.3}
 The extended transition function for an NFA,
 \[
   \hat{\delta}(q,\varepsilon)=\{q\},\quad
@@ -629,9 +637,9 @@ Describe an \(n\)-state NFA forcing all \(2^n\) subsets to appear in its equival
 \subsection{Introduction}
 In this report, we explore fundamental aspects of both deterministic and nondeterministic finite automata (DFAs and NFAs), including extended transition functions, product automaton construction for intersection, and state modifications for union. We further demonstrate the subset construction to establish the equivalence of NFAs and DFAs, showcasing the broad utility of these automata concepts in both theoretical and practical contexts.
 
-\subsection{Exercises}
+\subsection{Homework}
 
-\subsubsection{Homework 1}
+\subsubsection*{Homework 1}
 Let \(\mathcal{A} = (Q, \Sigma, \delta: Q \times \Sigma \to Q, q_0, F)\) be a DFA. Explain in what way you can view \(\mathcal{A}\) as an NFA by doing the following:
 \begin{enumerate}
 \item Let \(\mathcal{A}\) denote the following DFA:
@@ -705,7 +713,7 @@ Because each step in the DFA corresponds to a unique singleton transition in the
 \end{itemize}
 Thus the two automata recognize the same language.
 
-\subsubsection{Homework 2}
+\subsubsection*{Homework 2}
 \begin{enumerate}
   \item Describe in words the language \(L(\mathcal{A})\) accepted by the NFA \(\mathcal{A}\) pictured below.
   \item Specify the automaton \(\mathcal{A}\) formally as \((Q,\Sigma,\delta,q_0,F)\).
@@ -777,6 +785,9 @@ F^D=\{S:S\cap\{q_3\}\neq\varnothing\},\;
 \paragraph{6) Verification \& Minimization}  
 By construction \(L(\mathcal{A}^D)=L(\mathcal{A})\). The resulting DFA can then be minimized via standard algorithms.
 
+\subsection{Conclusion}
+By viewing any DFA as an NFA with singleton transitions and applying the subset (powerset) construction, we have shown that NFAs and DFAs recognize exactly the same class of languages.  This determinization process not only establishes the theoretical equivalence of nondeterministic and deterministic finite automata but also provides a concrete algorithm for converting an NFA into an equivalent DFA, reinforcing the practical utility of these foundational automata concepts.
+
 \newpage
 
 \section{Week 5: Equivalence and Minimization of Automata}
@@ -784,7 +795,9 @@ By construction \(L(\mathcal{A}^D)=L(\mathcal{A})\). The resulting DFA can then 
 \subsection{Introduction}
 This report focuses on Equivalence and Minimization of Automata, covering the process of determining whether two different DFA representations define the same language and how to construct the smallest possible DFA that accepts a given regular language. The table‐filling algorithm is introduced as a systematic way to check equivalence of states within a DFA by distinguishing them through input strings. This allows us to merge equivalent states, reducing the number of states while preserving language recognition. We also examine the uniqueness of the minimal DFA and its theoretical guarantees. Finally, the report discusses the complexity of these procedures and their implications for automata design.
 
-\subsection{Chapter 4.4 – Equivalence and Minimization of Automata}
+\subsection{Readings}
+
+\subsubsection*{Chapter 4.4 – Equivalence and Minimization of Automata}
 Chapter 4.4 covers the equivalence and minimization of automata, focusing on the problem of determining whether two descriptions of regular languages define the same language. The chapter introduces the table‐filling algorithm, a method to determine when two states of a DFA are equivalent by examining how they transition on different input strings. If two states lead to the same accepting or rejecting states for all possible inputs, they are considered equivalent and can be merged into a single state. If not, they are distinguishable. This process allows us to construct a minimal DFA, the smallest DFA that accepts a given language. The minimization process follows a structured approach:
 \begin{enumerate}
   \item Eliminate unreachable states.
@@ -793,10 +806,10 @@ Chapter 4.4 covers the equivalence and minimization of automata, focusing on the
 \end{enumerate}
 A key result is that the minimal DFA is unique up to renaming of states. The chapter also explores the complexity of minimization, showing that the table‐filling algorithm runs in \(O(n^2)\) time. Additionally, it presents an alternative perspective on DFA equivalence testing by constructing a combined DFA from two automata and checking equivalence of their start states. The final part discusses NFA minimization and its inherent difficulties compared to DFAs, highlighting limitations of direct state‐equivalence methods for NFAs.
 
-\subsection{Exercises}
+\subsection{Homework}
 \textbf{Note:} The following exercises test understanding of state equivalence, DFA minimization, and nonregularity proofs.
 
-\subsubsection{Exercise 3.2.1}
+\subsubsection*{Exercise 3.2.1}
 Here is the DFA’s transition table:
 \[
 \begin{array}{c|cc}
@@ -840,7 +853,7 @@ i=3 & \varnothing & 1 & \varepsilon\cup0
 (1 + 01)^*\,00\,(0 + 10)^*.
 \]
 
-\subsubsection{Exercise 3.2.2}
+\subsubsection*{Exercise 3.2.2}
 \[
 \begin{array}{c|cc}
      &0&1\\\hline
@@ -876,7 +889,7 @@ R_{13}^{(2)} = 1 \;\cup\;0\,(00)^*\,(1+01).
 1 \;+\;0\,(00)^*\,(1+01).
 \]
 
-\subsubsection{Exercise 4.1.1}
+\subsubsection*{Exercise 4.1.1}
 Prove the following languages are not regular using the pumping lemma:
 
 \paragraph{(a) \(\{0^n1^n\mid n\ge1\}\)}
@@ -901,7 +914,7 @@ Then \(\lvert s\rvert\ge p\), and any decomposition \(s=xyz\) with \(\lvert xy\r
 \paragraph{(f) \(\{0^n1^{2n}\mid n\ge1\}\)}
 \textbf{Proof.} Let \(s=0^p1^{2p}\). Decompose \(s=xyz\) with \(\lvert xy\rvert\le p\), so \(y=0^k\). Pumping down yields \(0^{p-k}1^{2p}\), where \(2(p-k)\neq2p\), so string is rejected. Contradiction.
 
-\subsubsection{Exercise 4.1.2}
+\subsubsection*{Exercise 4.1.2}
 Prove the following are not regular by the pumping lemma:
 
 \paragraph{(a) \(\{0^n\mid n\text{ is a perfect square}\}\)}
@@ -928,18 +941,21 @@ Prove the following are not regular by the pumping lemma:
 \paragraph{(h) \(\{w1^n\mid |w|=n\}\)}
 \textbf{Proof.} Let \(s=0^p1^p\). Pumping in the 0-block yields \(|w|\neq n\), so no longer in the language.
 
-\subsection{Interesting Question}
-\textbf{Question:}  
-\emph{Is there a polynomial-time algorithm for minimizing NFAs? If not, what makes NFA minimization so much harder than DFA minimization?}
 
 \subsection{Conclusion}
 In this report, we explored methods for testing equivalence of automata and minimizing DFAs using the table-filling algorithm. We demonstrated how equivalent states can be merged into a unique minimal DFA, ensuring that no smaller DFA exists for the same language. We also applied the pumping lemma to rigorously prove that a wide variety of languages are not regular. These concepts are fundamental in automata theory, with applications in compiler design, pattern recognition, and formal verification.
+\textbf{Question:}  
+\emph{Is there a polynomial-time algorithm for minimizing NFAs? If not, what makes NFA minimization so much harder than DFA minimization?}
 
 \newpage
 
 \section{Weeks 6 and 7: Turing Machines and Decidability}
 
-\subsection*{Reading}
+\subsection{Introduction}
+In Weeks 6 and 7, we extend our study from finite automata to the Turing machine as a more powerful model of computation (Section 8.2) and employ it to demonstrate key limits of algorithmic decidability: we motivate undecidability via “hello–world” detection (Section 8.1), prove the diagonal language \(L_{d}=\{w_i\mid w_i\notin L(M_i)\}\) is not even r.e., and show the universal language \(L_{u}=\{\langle M,w\rangle\mid M\text{ accepts }w\}\) is r.e.\ but undecidable—complemented by exercises on designing simple Turing machines and classifying halting‐related languages and their closure properties.
+
+
+\subsection{Readings}
 
 In this unit we introduce the Turing machine model (Section 8.2) and use it to prove fundamental limits of computation:  
 \begin{itemize}
@@ -956,7 +972,7 @@ In this unit we introduce the Turing machine model (Section 8.2) and use it to p
     proving it is r.e.\ but not decidable.  
 \end{itemize}
 
-\subsection*{Exercises}
+\subsection{Exercises}
 
 \subsubsection*{Exercise A: Constructing Turing Machines}
 
@@ -1061,7 +1077,7 @@ Decide which hold in general:
   \item True.
 \end{enumerate}
 
-\subsection*{Conclusion}
+\subsection{Conclusion}
 
 We have provided complete Turing‐machine configurations for the simulator, classified key halting‐related languages, and reviewed closure properties of decidable and r.e.\ classes.  These results illustrate the power and limits of Turing machines and set the stage for complexity‐theoretic questions in subsequent weeks.
 
@@ -1197,7 +1213,12 @@ We’ve surveyed P vs.\ NP, NP-completeness via SAT, practiced ordering and rela
 
 \section{Weeks 10 \& 11: Intractable Problems}
 
-\subsection{Chapter 10.1: The Classes \(\mathrm{P}\) and \(\mathrm{NP}\)}  
+\subsection{Introduction}
+In Weeks 10 and 11 we shift our focus to computational intractability by defining the classes P and NP and the concept of polynomial‐time reductions (Chapter 10.1), proving the NP‐completeness of SAT via Cook’s Theorem (Chapter 10.2), and then applying these ideas through exercises in rewriting formulas into CNF, deciding small SAT instances, and encoding complex constraints like Sudoku into conjunctive normal form.
+
+\subsection{Readings}
+
+\subsubsection*{Chapter 10.1: The Classes \(\mathrm{P}\) and \(\mathrm{NP}\)}  
 We refine decidability to \emph{tractability}.  A language \(L\) is in
 \(\mathrm{P}\) if some deterministic TM decides it in time \(O(n^k)\).  A
 language \(L\) is in \(\mathrm{NP}\) if some nondeterministic TM accepts
@@ -1213,7 +1234,7 @@ A language \(L\) is \emph{NP‐complete} if
 \end{enumerate}
 \end{definition}
 
-\subsection{Chapter 10.2: SAT and NP‐Completeness}\label{sec:chapter10.2}
+\subsubsection*{Chapter 10.2: SAT and NP‐Completeness}\label{sec:chapter10.2}
 \paragraph{The SAT Problem.}  Boolean formulas are built from variables,
 \(\land,\lor,\lnot\), and parentheses.  A formula is \emph{satisfiable} if
 some assignment of \(\{\mathrm{TRUE},\mathrm{FALSE}\}\) makes it true.
@@ -1227,9 +1248,9 @@ is in \(\mathrm{NP}\) (guess an assignment, evaluate in polynomial time).
 \paragraph{Cook’s Theorem.}  Every \(L\in\mathrm{NP}\) reduces to SAT in
 polynomial time; hence SAT is NP‐complete.
 
-\subsection{Exercises}\label{sec:week8-9-exercises}
+\subsection{Homework}\label{sec:week8-9-exercises}
 
-\subsubsection{Exercise 1: Rewriting in CNF}  
+\subsubsection*{Exercise 1: Rewriting in CNF}  
 Rewrite each formula into an equivalent conjunctive normal form.
 
 \[
@@ -1257,7 +1278,7 @@ Rewrite each formula into an equivalent conjunctive normal form.
 \end{aligned}
 \]
 
-\subsubsection{Exercise 2: Satisfiability}  
+\subsubsection*{Exercise 2: Satisfiability}  
 For each formula, decide whether it is satisfiable.  If yes, give a satisfying
 assignment; if not, prove no such assignment exists.
 
@@ -1291,7 +1312,7 @@ assignment; if not, prove no such assignment exists.
   each violates some clause.  Hence \(\psi_3\) is unsatisfiable.
 \end{itemize}
 
-\subsubsection{Exercise 3: Sudoku CNF Encoding}  
+\subsubsection*{Exercise 3: Sudoku CNF Encoding}  
 We have boolean variables
 \[
   x_{r,c,v},\quad
@@ -1325,16 +1346,15 @@ C_6{:}&\quad
 \end{aligned}
 \]
 
-\subsection{Interesting Question}
-Is there a practical sub-exponential algorithm for SAT on random formulas,
-and how does it relate to the worst-case NP-completeness barrier?
-
 \subsection{Conclusion}
 Weeks 8 \& 9 introduced the classes \(\mathrm{P}\) and \(\mathrm{NP}\), the
 notion of polynomial–time reduction, and NP‐completeness.  Cook’s Theorem
 places SAT at the heart of intractability.  We practiced CNF rewriting,
 satisfiability proofs, and large‐scale CNF encodings (Sudoku), reinforcing
 both the theoretical limits and the practical modeling power of SAT.
+\textbf{Interesting Question}
+Is there a practical sub-exponential algorithm for SAT on random formulas,
+and how does it relate to the worst-case NP-completeness barrier?
 
 \section{Bibliography}
 \begin{thebibliography}{99}
